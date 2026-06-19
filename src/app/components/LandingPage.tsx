@@ -1,6 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 import Image from 'next/image';
 import {
   Bot,
@@ -11,43 +18,76 @@ import {
   ChevronRight,
   Smartphone,
   Moon,
+  Sun,
   Award,
   ChevronDown,
   Star,
   Trophy,
   BookOpen,
   Users,
+  Sparkles,
+  Target,
+  Clock,
+  TrendingUp,
+  Menu,
+  X,
+  Play,
 } from 'lucide-react';
 
 const TELEGRAM_URL = 'https://t.me/ispytpdrbot?startapp';
 
-// ─── Reusable CTA Button ─────────────────────────────────────────────────────
-function TelegramButton({
-  size = 'default',
-  className = '',
-  label = 'Почати безкоштовно',
-}: {
-  size?: 'default' | 'large';
-  className?: string;
-  label?: string;
-}) {
-  const padding = size === 'large' ? 'px-10 py-5 text-lg' : 'px-8 py-4 text-base';
-  return (
-    <a
-      href={TELEGRAM_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      id="cta-telegram-main"
-      className={`group relative ${padding} bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-bold hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden ${className}`}
-    >
-      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-      <Bot className="w-6 h-6 relative z-10 shrink-0" />
-      <span className="relative z-10">{label}</span>
-    </a>
-  );
+/* ─── THEME CONTEXT ──────────────────────────────────────────────────── */
+type Theme = 'dark' | 'light';
+const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({
+  theme: 'dark',
+  toggle: () => {},
+});
+
+function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<Theme>('dark');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('pdr-theme') as Theme | null;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initial = saved ?? (prefersDark ? 'dark' : 'light');
+    setTheme(initial);
+    document.documentElement.setAttribute('data-theme', initial);
+  }, []);
+
+  const toggle = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('pdr-theme', next);
+      return next;
+    });
+  }, []);
+
+  return <ThemeContext.Provider value={{ theme, toggle }}>{children}</ThemeContext.Provider>;
 }
 
-// ─── Animated counter ─────────────────────────────────────────────────────────
+const useTheme = () => useContext(ThemeContext);
+
+/* ─── SCROLL REVEAL HOOK ─────────────────────────────────────────────── */
+function useReveal() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
+/* ─── ANIMATED COUNTER ───────────────────────────────────────────────── */
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
@@ -58,18 +98,19 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
       ([entry]) => {
         if (entry.isIntersecting && !started.current) {
           started.current = true;
-          const duration = 1500;
-          const step = target / (duration / 16);
+          const duration = 1800;
+          const steps = 60;
+          const increment = target / steps;
           let current = 0;
           const timer = setInterval(() => {
-            current += step;
+            current += increment;
             if (current >= target) {
               setCount(target);
               clearInterval(timer);
             } else {
               setCount(Math.floor(current));
             }
-          }, 16);
+          }, duration / steps);
         }
       },
       { threshold: 0.5 }
@@ -78,394 +119,565 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
     return () => observer.disconnect();
   }, [target]);
 
+  return <span ref={ref}>{Number.isInteger(target) ? count.toLocaleString('uk-UA') : count.toFixed(1)}{suffix}</span>;
+}
+
+/* ─── THEME TOGGLE BUTTON ────────────────────────────────────────────── */
+function ThemeToggle() {
+  const { theme, toggle } = useTheme();
   return (
-    <span ref={ref}>
-      {count.toLocaleString('uk-UA')}
-      {suffix}
-    </span>
+    <button
+      onClick={toggle}
+      aria-label="Переключити тему"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-full glass-card hover:border-theme transition-all"
+      style={{ border: '1px solid var(--border-color)' }}
+    >
+      {theme === 'dark' ? (
+        <Sun className="w-4 h-4" style={{ color: 'var(--accent-cyan)' }} />
+      ) : (
+        <Moon className="w-4 h-4" style={{ color: 'var(--accent-blue)' }} />
+      )}
+      <span className="text-xs font-semibold hidden sm:block" style={{ color: 'var(--text-secondary)' }}>
+        {theme === 'dark' ? 'Світла' : 'Темна'}
+      </span>
+    </button>
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+/* ─── CTA BUTTON ─────────────────────────────────────────────────────── */
+function TelegramButton({
+  label = 'Почати безкоштовно',
+  size = 'md',
+  id = 'cta-main',
+  className = '',
+}: {
+  label?: string;
+  size?: 'sm' | 'md' | 'lg';
+  id?: string;
+  className?: string;
+}) {
+  const padding = {
+    sm: 'px-5 py-2.5 text-sm',
+    md: 'px-7 py-3.5 text-base',
+    lg: 'px-10 py-5 text-lg',
+  }[size];
+
+  return (
+    <a
+      href={TELEGRAM_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      id={id}
+      className={`relative inline-flex items-center gap-2.5 ${padding} rounded-2xl font-bold btn-shimmer text-white transition-all duration-300 ${className}`}
+    >
+      <div className="pulse-ring opacity-0 group-hover:opacity-100" />
+      <Bot className="shrink-0" style={{ width: size === 'lg' ? '1.5rem' : '1.25rem', height: size === 'lg' ? '1.5rem' : '1.25rem' }} />
+      <span>{label}</span>
+    </a>
+  );
+}
+
+/* ─── MAIN LANDING ───────────────────────────────────────────────────── */
 export default function LandingPage() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [openFaq, setOpenFaq] = useState<number>(0);
+  const [heroVisible, setHeroVisible] = useState(false);
+
+  useReveal();
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 50);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setHeroVisible(true), 80);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { clearTimeout(t); window.removeEventListener('scroll', onScroll); };
   }, []);
 
-  const features = [
-    {
-      icon: <Smartphone className="w-8 h-8 text-blue-400" />,
-      title: 'Без завантажень',
-      desc: "Навчайся прямо в Telegram. Ніяких зайвих додатків — економ пам'ять телефону.",
-    },
-    {
-      icon: <ShieldCheck className="w-8 h-8 text-cyan-400" />,
-      title: 'Офіційні питання',
-      desc: '100% відповідність базі питань Головного Сервісного Центру МВС на 2026 рік.',
-    },
-    {
-      icon: <BarChart3 className="w-8 h-8 text-purple-400" />,
-      title: 'Розумна аналітика',
-      desc: "Алгоритм запам'ятовує твої помилки та змушує повторювати складні теми.",
-    },
-    {
-      icon: <Moon className="w-8 h-8 text-yellow-400" />,
-      title: 'Темна тема',
-      desc: 'Бережи очі. Ідеально для навчання ввечері або в транспорті.',
-    },
+  const stats = [
+    { icon: <Users style={{ color: 'var(--accent-cyan)', width: '1.4rem', height: '1.4rem' }} />, value: 1400, suffix: '+', label: 'учнів' },
+    { icon: <Trophy style={{ color: '#f59e0b', width: '1.4rem', height: '1.4rem' }} />, value: 94, suffix: '%', label: 'здають з 1-го разу' },
+    { icon: <BookOpen style={{ color: 'var(--accent-purple)', width: '1.4rem', height: '1.4rem' }} />, value: 2000, suffix: '+', label: 'питань у базі' },
+    { icon: <Star style={{ color: '#fb923c', width: '1.4rem', height: '1.4rem' }} />, value: 4.9, suffix: '/5', label: 'середня оцінка' },
   ];
 
-  const stats = [
-    { icon: <Users className="w-6 h-6 text-cyan-400" />, value: 1400, suffix: '+', label: 'учнів' },
-    { icon: <Trophy className="w-6 h-6 text-yellow-400" />, value: 94, suffix: '%', label: 'здають з першого разу' },
-    { icon: <BookOpen className="w-6 h-6 text-purple-400" />, value: 2000, suffix: '+', label: 'питань у базі' },
-    { icon: <Star className="w-6 h-6 text-orange-400" />, value: 4.9, suffix: '/5', label: 'середня оцінка' },
+  const features = [
+    { icon: <Smartphone />, color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', title: 'Без завантажень', desc: "Навчайся прямо в Telegram. Ніяких зайвих додатків — економить пам'ять телефону." },
+    { icon: <ShieldCheck />, color: '#06b6d4', bg: 'rgba(6,182,212,0.12)', title: 'Офіційні питання', desc: '100% відповідність базі МВС 2026 року. Автоматичне оновлення при змінах.' },
+    { icon: <BarChart3 />, color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)', title: 'Розумна аналітика', desc: "ШІ-алгоритм запам'ятовує твої помилки та акцентує на складних темах." },
+    { icon: <Target />, color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', title: 'Симулятор іспиту', desc: '20 питань за 20 хвилин — точна копія реального іспиту в МВС.' },
+    { icon: <TrendingUp />, color: '#10b981', bg: 'rgba(16,185,129,0.12)', title: 'Прогрес 0→100%', desc: 'Відстежуй готовність у відсотках. Бачиш точно, чи готовий до іспиту.' },
+    { icon: <Moon />, color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', title: 'Темна / Світла тема', desc: 'Як у нашому міні-апп — комфортне навчання вдень і вночі.' },
+  ];
+
+  const steps = [
+    { num: '01', title: 'Відкрий у Telegram', desc: 'Натисни кнопку — і бот одразу в твоєму месенджері. Жодної реєстрації.' },
+    { num: '02', title: 'Обери категорію', desc: 'A, B, C, D або одразу всі теми. Навчайся по розділах або в режимі Марафону.' },
+    { num: '03', title: 'Вчи розумно', desc: 'ШІ фіксує помилки і змушує повторювати тільки складне. Ніякого зазубрювання.' },
+    { num: '04', title: 'Здай на 20/20', desc: 'Пройди симулятор 5 разів поспіль — і йди на реальний іспит впевнено.' },
+  ];
+
+  const testimonials = [
+    { name: 'Олексій М.', tag: 'Категорія B', text: 'Здав з першого разу, зробив 0 помилок! Симулятор іспиту — топ, відчув себе ніби вже в МВС.', stars: 5, avatar: 11 },
+    { name: 'Катерина Л.', tag: 'Категорія A', text: 'Вчила ПДР тільки у транспорті по 15 хвилин на день. За 2 тижні склала іспит. Дякую!', stars: 5, avatar: 12 },
+    { name: 'Дмитро П.', tag: 'Категорія C', text: 'Двічі провалювався у старій школі. Тут за тиждень інтенсиву — склав. Аналітика помилок реально допомогла.', stars: 5, avatar: 13 },
   ];
 
   const faqs = [
-    {
-      q: 'Чи відповідають питання офіційній базі МВС?',
-      a: 'Так, абсолютно. Наша база на 100% синхронізована з актуальними питаннями Головного Сервісного Центру МВС України на 2026 рік. Якщо питання змінюються на офіційному іспиті, вони автоматично оновлюються у нашому додатку.',
-    },
-    {
-      q: 'Чи потрібно щось завантажувати на телефон?',
-      a: "Ні. Увесь процес навчання проходить безпосередньо у вашому месенджері Telegram. Це економить пам'ять телефону та дозволяє вчити ПДР на будь-якому пристрої, де встановлено Telegram.",
-    },
-    {
-      q: 'Як працює симулятор іспиту?',
-      a: 'Симулятор повністю відтворює умови реального іспиту в Сервісному центрі: вам дається 20 хвилин на 20 випадкових питань. Для успішної здачі можна зробити не більше 2 помилок. Ми рекомендуємо здавати симулятор мінімум 5 разів поспіль перед реальним іспитом.',
-    },
-    {
-      q: 'Скільки коштує користування додатком?',
-      a: "Базовий доступ та тестування — безкоштовні. Для доступу до глибокої аналітики, ШІ-пояснень складних ситуацій та режиму 'Марафон' передбачена вигідна підписка у гривнях, яка обійдеться дешевше, ніж одна перездача іспиту в МВС.",
-    },
+    { q: 'Чи відповідають питання офіційній базі МВС?', a: 'Так, абсолютно. Наша база на 100% синхронізована з актуальними питаннями Головного Сервісного Центру МВС України на 2026 рік. Якщо питання змінюються, вони автоматично оновлюються у додатку.' },
+    { q: 'Чи потрібно щось завантажувати на телефон?', a: "Ні. Увесь процес навчання проходить у Telegram. Це економить пам'ять і дозволяє вчити ПДР на будь-якому пристрої, де встановлено Telegram." },
+    { q: 'Як працює симулятор іспиту?', a: 'Симулятор відтворює умови реального іспиту: 20 хвилин на 20 випадкових питань, максимум 2 помилки. Рекомендуємо пройти його мінімум 5 разів поспіль.' },
+    { q: 'Скільки коштує користування додатком?', a: "Базовий доступ — безкоштовний. Pro-версія з глибокою аналітикою, ШІ-поясненнями та режимом Марафон обійдеться дешевше, ніж одна перездача в МВС." },
+    { q: 'На яких категоріях можна готуватися?', a: 'Додаток підтримує категорії A, B, C та D. Ти можеш обирати конкретну категорію або практикувати всі одночасно в режимі Марафон.' },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 font-[family-name:var(--font-inter)] overflow-hidden">
+    <ThemeProvider>
+      <LandingInner
+        heroVisible={heroVisible}
+        scrolled={scrolled}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        openFaq={openFaq}
+        setOpenFaq={setOpenFaq}
+        stats={stats}
+        features={features}
+        steps={steps}
+        testimonials={testimonials}
+        faqs={faqs}
+      />
+    </ThemeProvider>
+  );
+}
 
-      {/* ── Background blobs ─────────────────────────────────────── */}
-      <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-500/20 blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30%] h-[30%] rounded-full bg-purple-600/10 blur-[100px]" />
+/* ─── INNER COMPONENT (uses theme context) ───────────────────────────── */
+function LandingInner({
+  heroVisible, scrolled, menuOpen, setMenuOpen,
+  openFaq, setOpenFaq,
+  stats, features, steps, testimonials, faqs,
+}: {
+  heroVisible: boolean;
+  scrolled: boolean;
+  menuOpen: boolean;
+  setMenuOpen: (v: boolean) => void;
+  openFaq: number;
+  setOpenFaq: (v: number) => void;
+  stats: Array<{ icon: React.ReactNode; value: number; suffix: string; label: string }>;
+  features: Array<{ icon: React.ReactNode; color: string; bg: string; title: string; desc: string }>;
+  steps: Array<{ num: string; title: string; desc: string }>;
+  testimonials: Array<{ name: string; tag: string; text: string; stars: number; avatar: number }>;
+  faqs: Array<{ q: string; a: string }>;
+}) {
+  const { theme } = useTheme();
+
+  return (
+    <div className="min-h-screen bg-theme-primary" style={{ position: 'relative' }}>
+      {/* Noise texture */}
+      <div className="noise" />
+
+      {/* ── Ambient blobs ── */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }} aria-hidden="true">
+        <div className="blob animate-blob" style={{ width: '45vw', height: '45vw', top: '-10%', left: '-10%', background: 'var(--blob-1)' }} />
+        <div className="blob animate-blob-delay" style={{ width: '40vw', height: '40vw', bottom: '-10%', right: '-10%', background: 'var(--blob-2)' }} />
+        <div className="blob" style={{ width: '30vw', height: '30vw', top: '40%', left: '50%', transform: 'translateX(-50%)', background: 'var(--blob-3)', filter: 'blur(100px)' }} />
       </div>
 
-      {/* ── Header ──────────────────────────────────────────────── */}
-      <header className="relative z-10 container mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl overflow-hidden ring-2 ring-cyan-500/30">
-            <Image
-              src="/img/logo.png"
-              alt="Логотип ПДР України"
-              width={40}
-              height={40}
-              className="w-full h-full object-cover"
-              priority
-            />
+      {/* ── HEADER ─────────────────────────────────────────────── */}
+      <header
+        style={{
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+          transition: 'all 0.3s ease',
+          backdropFilter: scrolled ? 'blur(20px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+          background: scrolled ? 'var(--bg-card)' : 'transparent',
+          borderBottom: scrolled ? '1px solid var(--border-color)' : '1px solid transparent',
+        }}
+      >
+        <div className="container-xl" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem 1.5rem' }}>
+          {/* Logo */}
+          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', textDecoration: 'none' }}>
+            <div style={{ width: '2.25rem', height: '2.25rem', borderRadius: '0.625rem', overflow: 'hidden', boxShadow: '0 0 15px var(--glow-cyan)' }}>
+              <Image src="/img/logo.png" alt="ПДР України" width={36} height={36} priority style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <span style={{ fontWeight: 800, fontSize: '1.1rem', letterSpacing: '0.05em' }} className="gradient-text">
+              ПДР УКРАЇНИ
+            </span>
+          </a>
+
+          {/* Desktop nav */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {[['#features', 'Переваги'], ['#how', 'Як це'], ['#faq', 'FAQ']].map(([href, label]) => (
+              <a key={href} href={href}
+                style={{ display: 'none', padding: '0.375rem 0.875rem', fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none', borderRadius: '0.5rem', transition: 'color 0.2s' }}
+                className="md-nav-link"
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-cyan)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-secondary)')}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <ThemeToggle />
+            <TelegramButton label="Відкрити в Telegram" size="sm" id="cta-header" className="hidden sm:inline-flex" />
+            {/* Mobile menu btn */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Меню"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '2.25rem', height: '2.25rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--bg-glass)', color: 'var(--text-primary)', cursor: 'pointer' }}
+              className="sm:hidden"
+            >
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
           </div>
-          <span className="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-            ПДР УКРАЇНИ
-          </span>
         </div>
-        <a
-          href={TELEGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          id="cta-header"
-          className="hidden md:flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all backdrop-blur-md font-medium text-sm"
-        >
-          <Bot className="w-4 h-4 text-cyan-400" />
-          Відкрити в Telegram
-        </a>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {[['#features', 'Переваги'], ['#how', 'Як це працює'], ['#faq', 'FAQ']].map(([href, label]) => (
+              <a key={href} href={href} onClick={() => setMenuOpen(false)}
+                style={{ padding: '0.625rem 0.75rem', fontSize: '0.9375rem', fontWeight: 500, color: 'var(--text-primary)', textDecoration: 'none', borderRadius: '0.5rem', background: 'var(--bg-glass)' }}>
+                {label}
+              </a>
+            ))}
+            <TelegramButton label="Відкрити в Telegram" size="sm" id="cta-mobile-menu" className="mt-2 w-full justify-center" />
+          </div>
+        )}
       </header>
 
-      <main>
-        {/* ── Hero ─────────────────────────────────────────────── */}
+      <main style={{ paddingTop: '5rem' }}>
+
+        {/* ── HERO ──────────────────────────────────────────────── */}
         <section
-          className="relative z-10 container mx-auto px-6 pt-12 pb-24 lg:pt-24 lg:pb-32 flex flex-col lg:flex-row items-center gap-12 lg:gap-20"
+          style={{ position: 'relative', zIndex: 10, overflow: 'hidden', minHeight: '90vh', display: 'flex', alignItems: 'center' }}
           aria-labelledby="hero-heading"
         >
-          {/* Left */}
-          <div
-            className={`flex-1 transition-all duration-1000 transform ${
-              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-            }`}
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 mb-6 font-semibold text-sm">
-              <Zap className="w-4 h-4" />
-              Оновлені питання 2026 року
-            </div>
+          {/* Grid bg */}
+          <div className="bg-grid" style={{ position: 'absolute', inset: 0, opacity: 0.6 }} aria-hidden="true" />
 
-            <h1
-              id="hero-heading"
-              className="text-5xl lg:text-7xl font-extrabold leading-tight mb-6"
-            >
-              Здай іспит з ПДР на{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                20/20
-              </span>{' '}
-              з першого разу
-            </h1>
+          <div className="container-xl" style={{ width: '100%', paddingTop: '3rem', paddingBottom: '4rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3rem' }}>
 
-            <p className="text-lg text-slate-400 mb-10 max-w-xl leading-relaxed">
-              Твій персональний ШІ-репетитор прямо в Telegram. Готуйся до іспиту
-              в Сервісному центрі МВС без нудних лекцій. Офіційні тести та
-              гарантія результату.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <TelegramButton size="default" label="Почати безкоштовно" />
-              <a
-                href="#how-it-works"
-                id="cta-how-it-works"
-                className="px-8 py-4 rounded-2xl font-bold text-base border border-slate-700 hover:border-cyan-500/50 hover:bg-slate-800/50 transition-all flex items-center justify-center gap-2"
+              {/* Text content — center on mobile */}
+              <div
+                style={{
+                  maxWidth: '44rem', textAlign: 'center', width: '100%',
+                  opacity: heroVisible ? 1 : 0,
+                  transform: heroVisible ? 'translateY(0)' : 'translateY(30px)',
+                  transition: 'all 0.9s cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
               >
-                <CheckCircle2 className="w-5 h-5 text-slate-400" />
-                Як це працює?
-              </a>
-            </div>
-
-            {/* Social proof */}
-            <div className="mt-12 flex items-center gap-6">
-              <div className="flex -space-x-3">
-                {[11, 12, 13, 14].map((i) => (
-                  <div
-                    key={i}
-                    className="w-11 h-11 rounded-full border-2 border-slate-950 bg-slate-800 overflow-hidden"
-                  >
-                    <Image
-                      src={`https://i.pravatar.cc/100?img=${i}`}
-                      alt={`Студент ${i}`}
-                      width={44}
-                      height={44}
-                      loading="lazy"
-                    />
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div className="flex items-center gap-1 text-yellow-400 mb-1">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <svg key={s} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
+                {/* Badge */}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.375rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1.5rem' }}>
+                  <Sparkles size={14} style={{ color: 'var(--accent-cyan)' }} />
+                  <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>Оновлені питання 2026 · Офіційна база МВС</span>
                 </div>
-                <p className="text-sm text-slate-400">
-                  <strong className="text-white">4.9/5</strong> оцінка від 1 400+ учнів
-                </p>
-              </div>
-            </div>
-          </div>
 
-          {/* Right — Phone mockup */}
-          <div
-            className={`flex-1 relative transition-all duration-1000 delay-300 transform ${
-              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-            }`}
-          >
-            <div className="relative w-full max-w-sm mx-auto animate-float">
-              <div className="absolute inset-0 bg-cyan-500/20 blur-[60px] rounded-full" aria-hidden="true" />
-              <Image
-                src="/img/1000007882.jpg"
-                alt="Інтерфейс додатку ПДР України в Telegram з неоновим дизайном"
-                width={420}
-                height={740}
-                priority
-                fetchPriority="high"
-                className="relative z-10 w-full rounded-[2.5rem] border-[8px] border-slate-900 shadow-2xl shadow-cyan-900/50 object-cover"
-              />
-              {/* Floating badge */}
-              <div className="absolute -right-4 top-1/4 z-20 bg-slate-900/90 backdrop-blur-md border border-slate-700 p-4 rounded-2xl shadow-xl animate-float-reverse">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                    <Award className="w-6 h-6 text-green-400" />
+                <h1
+                  id="hero-heading"
+                  style={{
+                    fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+                    fontWeight: 900,
+                    lineHeight: 1.08,
+                    letterSpacing: '-0.02em',
+                    marginBottom: '1.25rem',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  Здай іспит з ПДР на{' '}
+                  <span className="gradient-text-animated">20/20</span>
+                  <br />з першого разу
+                </h1>
+
+                <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '2.5rem', maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto' }}>
+                  Персональний ШІ-репетитор прямо в Telegram. Офіційні тести МВС, симулятор іспиту та розумна аналітика помилок. Без реєстрації та завантажень.
+                </p>
+
+                {/* CTA buttons */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', justifyContent: 'center', marginBottom: '2.5rem' }}>
+                  <TelegramButton label="Почати безкоштовно" size="lg" id="cta-hero-main" className="group" />
+                  <a
+                    href="#how"
+                    id="cta-how"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                      padding: '1.1rem 1.75rem',
+                      borderRadius: '1rem',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-primary)',
+                      fontWeight: 600,
+                      fontSize: '1.0625rem',
+                      textDecoration: 'none',
+                      background: 'var(--bg-glass)',
+                      backdropFilter: 'blur(10px)',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent-cyan)'; e.currentTarget.style.background = 'var(--badge-bg)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.background = 'var(--bg-glass)'; }}
+                  >
+                    <Play size={18} style={{ color: 'var(--accent-cyan)' }} />
+                    Як це працює
+                  </a>
+                </div>
+
+                {/* Social proof row */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex' }}>
+                    {[11, 12, 13, 14, 15].map((i, idx) => (
+                      <div key={i} style={{ width: '2.25rem', height: '2.25rem', borderRadius: '9999px', border: '2px solid var(--bg-primary)', overflow: 'hidden', marginLeft: idx > 0 ? '-0.6rem' : 0, background: 'var(--bg-secondary)' }}>
+                        <Image src={`https://i.pravatar.cc/100?img=${i}`} alt="Учень" width={36} height={36} loading="lazy" />
+                      </div>
+                    ))}
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Результат</p>
-                    <p className="text-white font-bold">Іспит складено!</p>
+                    <div style={{ display: 'flex', gap: '2px', marginBottom: '2px' }}>
+                      {[1,2,3,4,5].map(s => <Star key={s} size={14} fill="#f59e0b" strokeWidth={0} />)}
+                    </div>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                      <strong style={{ color: 'var(--text-primary)' }}>4.9/5</strong> · 1 400+ задоволених учнів
+                    </p>
+                  </div>
+                  <div style={{ height: '2rem', width: '1px', background: 'var(--border-color)' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', padding: '0.25rem 0.75rem', borderRadius: '9999px', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                    <div style={{ width: '0.5rem', height: '0.5rem', borderRadius: '9999px', background: '#10b981' }} className="animate-ping-slow" />
+                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#10b981' }}>Безкоштовно</span>
                   </div>
                 </div>
               </div>
+
+              {/* Phone mockup */}
+              <div
+                style={{
+                  opacity: heroVisible ? 1 : 0,
+                  transform: heroVisible ? 'translateY(0)' : 'translateY(50px)',
+                  transition: 'all 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.25s',
+                  position: 'relative', width: '100%', maxWidth: '22rem',
+                }}
+              >
+                <div style={{ position: 'absolute', inset: '-2rem', background: 'radial-gradient(ellipse, var(--glow-cyan) 0%, transparent 70%)', filter: 'blur(40px)' }} aria-hidden="true" />
+                <div className="animate-float" style={{ position: 'relative' }}>
+                  <div className="gradient-border" style={{ borderRadius: '2.5rem', display: 'inline-block', width: '100%' }}>
+                    <Image
+                      src="/img/1000007882.jpg"
+                      alt="Інтерфейс ПДР України в Telegram — головний екран з неоновим дизайном"
+                      width={380}
+                      height={680}
+                      priority
+                      fetchPriority="high"
+                      style={{
+                        width: '100%', height: 'auto', borderRadius: '2.3rem',
+                        display: 'block',
+                        boxShadow: `0 40px 80px rgba(0,0,0,${theme === 'dark' ? '0.7' : '0.2'}), 0 0 0 1px var(--border-color)`,
+                      }}
+                    />
+                  </div>
+                  {/* Floating badge — exam result */}
+                  <div
+                    className="animate-float-badge glass-card"
+                    style={{
+                      position: 'absolute', right: '-1rem', top: '25%', zIndex: 20,
+                      padding: '0.75rem 1rem', borderRadius: '1rem',
+                      boxShadow: 'var(--shadow-card)',
+                      minWidth: '9rem',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+                      <div style={{ width: '2.25rem', height: '2.25rem', borderRadius: '9999px', background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Award size={18} style={{ color: '#10b981' }} />
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '0.625rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>Результат</p>
+                        <p style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--text-primary)' }}>Іспит складено!</p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Floating badge — score */}
+                  <div
+                    className="glass-card"
+                    style={{
+                      position: 'absolute', left: '-1rem', bottom: '20%', zIndex: 20,
+                      padding: '0.75rem 1rem', borderRadius: '1rem',
+                      boxShadow: 'var(--shadow-card)',
+                      animation: 'float-badge 6s ease-in-out infinite 1s',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <div style={{ width: '2rem', height: '2rem', borderRadius: '9999px', background: 'rgba(6,182,212,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Target size={14} style={{ color: 'var(--accent-cyan)' }} />
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Точність</p>
+                        <p style={{ fontWeight: 800, fontSize: '1.125rem', color: 'var(--text-primary)' }}>20 <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>/ 20</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
+
+          {/* Bottom gradient fade */}
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '8rem', background: 'linear-gradient(to bottom, transparent, var(--bg-primary))', zIndex: 5, pointerEvents: 'none' }} />
         </section>
 
-        {/* ── Stats Bar ────────────────────────────────────────── */}
-        <section className="relative z-10 bg-slate-900/60 border-y border-white/5 py-12" aria-label="Статистика">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* ── STATS BAR ─────────────────────────────────────────── */}
+        <section style={{ position: 'relative', zIndex: 10 }} aria-label="Статистика">
+          <div className="container-xl" style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
+            <div className="reveal" style={{ borderRadius: '1.5rem', border: '1px solid var(--border-color)', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', padding: '2rem', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
               {stats.map((s, i) => (
-                <div key={i} className="flex flex-col items-center text-center gap-2">
-                  <div className="w-12 h-12 rounded-xl bg-slate-800/50 flex items-center justify-center mb-1">
+                <div key={i} className={`reveal reveal-delay-${i + 1}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.375rem' }}>
+                  <div style={{ width: '2.75rem', height: '2.75rem', borderRadius: '0.75rem', background: 'var(--bg-glass)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.25rem' }}>
                     {s.icon}
                   </div>
-                  <p className="text-3xl font-extrabold text-white">
-                    {typeof s.value === 'number' && Number.isInteger(s.value) ? (
-                      <AnimatedCounter target={s.value} suffix={s.suffix} />
-                    ) : (
-                      <span>{s.value}{s.suffix}</span>
-                    )}
+                  <p style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 900, color: 'var(--text-primary)', lineHeight: 1 }}>
+                    <AnimatedCounter target={s.value} suffix={s.suffix} />
                   </p>
-                  <p className="text-slate-400 text-sm">{s.label}</p>
+                  <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{s.label}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── Features ─────────────────────────────────────────── */}
-        <section
-          id="how-it-works"
-          className="relative z-10 py-24 bg-slate-900/30 border-b border-white/5"
-          aria-labelledby="features-heading"
-        >
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 id="features-heading" className="text-3xl lg:text-5xl font-bold mb-4">
-                Переваги нашого{' '}
-                <span className="text-cyan-400">Telegram Mini App</span>
+        {/* ── FEATURES ──────────────────────────────────────────── */}
+        <section id="features" style={{ position: 'relative', zIndex: 10, paddingTop: '6rem', paddingBottom: '6rem' }} aria-labelledby="features-heading">
+          <div className="container-xl">
+            <div className="reveal" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+              <div style={{ display: 'inline-block', padding: '0.25rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>Можливості</div>
+              <h2 id="features-heading" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.875rem', letterSpacing: '-0.02em' }}>
+                Чому{' '}
+                <span className="gradient-text">наш Mini App</span>
+                {' '}— кращий вибір
               </h2>
-              <p className="text-slate-400 max-w-2xl mx-auto">
-                Чому звичайні книжки та сайти застаріли, а наш бот доводить до результату 20 з 20.
+              <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7, fontSize: '1.0625rem' }}>
+                Жодних нудних лекцій. Тільки практика, яка реально доводить до результату 20 з 20.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {features.map((feat, idx) => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 18rem), 1fr))', gap: '1.25rem' }}>
+              {features.map((f, i) => (
                 <article
-                  key={idx}
-                  className="bg-slate-950/50 border border-white/5 p-8 rounded-3xl hover:bg-slate-900 hover:border-cyan-500/20 transition-all duration-300 group"
+                  key={i}
+                  className={`reveal reveal-delay-${(i % 3) + 1} glass-card`}
+                  style={{ padding: '1.75rem', borderRadius: '1.5rem', cursor: 'default' }}
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    {feat.icon}
+                  <div className="feature-icon-wrap" style={{ background: f.bg, marginBottom: '1.25rem' }}>
+                    {React.cloneElement(f.icon as React.ReactElement<{ size?: number; color?: string }>, { size: 22, color: f.color })}
                   </div>
-                  <h3 className="text-xl font-bold mb-3">{feat.title}</h3>
-                  <p className="text-slate-400 leading-relaxed">{feat.desc}</p>
+                  <h3 style={{ fontWeight: 700, fontSize: '1.0625rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{f.title}</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.65 }}>{f.desc}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── Visual Showcase ───────────────────────────────────── */}
-        <section className="relative z-10 py-24 container mx-auto px-6 overflow-hidden" aria-labelledby="showcase-heading">
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            {/* Screenshots grid */}
-            <div className="flex-1 order-2 lg:order-1 relative">
-              <div className="absolute inset-0 bg-blue-600/10 blur-[80px] rounded-full" aria-hidden="true" />
-              <div className="grid grid-cols-2 gap-4 relative z-10">
-                <Image
-                  src="/img/1000007884.jpg"
-                  alt="Вибір категорії ПДР у темній темі"
-                  width={280}
-                  height={500}
-                  loading="lazy"
-                  className="rounded-3xl border border-white/10 shadow-2xl transform translate-y-8 w-full"
-                />
-                <Image
-                  src="/img/1000007834.jpg"
-                  alt="Успішний результат іспиту ПДР 20 з 20"
-                  width={280}
-                  height={500}
-                  loading="lazy"
-                  className="rounded-3xl border border-white/10 shadow-2xl w-full"
-                />
-              </div>
-            </div>
+        {/* ── SHOWCASE ──────────────────────────────────────────── */}
+        <section style={{ position: 'relative', zIndex: 10, paddingTop: '2rem', paddingBottom: '6rem', overflow: 'hidden' }} aria-labelledby="showcase-heading">
+          <div className="bg-dots" style={{ position: 'absolute', inset: 0, opacity: 0.5 }} aria-hidden="true" />
+          <div className="container-xl" style={{ position: 'relative' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4rem' }}>
 
-            {/* Text */}
-            <div className="flex-1 order-1 lg:order-2">
-              <h2 id="showcase-heading" className="text-4xl lg:text-5xl font-bold mb-6">
-                Відчуй атмосферу <br />
-                <span className="text-cyan-400">реального іспиту</span>
-              </h2>
-              <p className="text-lg text-slate-400 mb-8">
-                Наш симулятор повністю відтворює умови справжнього іспиту в МВС: 20 питань,
-                20 хвилин та право лише на 2 помилки. Звикни до стресу заздалегідь.
-              </p>
-              <ul className="space-y-4 mb-10">
-                {[
-                  'Режим «Марафон» на 2000+ питань',
-                  'Детальні ШІ-пояснення до кожної помилки',
-                  'Відстеження готовності у відсотках',
-                  'Розбивка за категоріями прав (A, B, C, D)',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center shrink-0">
-                      <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-                    </div>
-                    <span className="text-slate-300 font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={TELEGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                id="cta-demo"
-                className="inline-flex items-center gap-2 text-cyan-400 font-bold hover:text-cyan-300 transition-colors group"
-              >
-                Запустити демо-іспит
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+              {/* Text */}
+              <div className="reveal" style={{ textAlign: 'center', maxWidth: '42rem' }}>
+                <div style={{ display: 'inline-block', padding: '0.25rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>Інтерфейс</div>
+                <h2 id="showcase-heading" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem', letterSpacing: '-0.02em' }}>
+                  Відчуй атмосферу{' '}
+                  <span className="gradient-text">реального іспиту</span>
+                </h2>
+                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: '1.0625rem', marginBottom: '1.75rem' }}>
+                  20 питань · 20 хвилин · максимум 2 помилки. Наш симулятор — точна копія МВС.
+                </p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', textAlign: 'left', maxWidth: '28rem', margin: '0 auto 2rem' }}>
+                  {['Режим «Марафон» на 2000+ питань', 'Детальні ШІ-пояснення до кожної помилки', 'Відстеження готовності у відсотках', 'Розбивка за категоріями A, B, C, D'].map((item, i) => (
+                    <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <div style={{ width: '1.375rem', height: '1.375rem', borderRadius: '9999px', background: 'rgba(6,182,212,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <CheckCircle2 size={13} style={{ color: 'var(--accent-cyan)' }} />
+                      </div>
+                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" id="cta-showcase"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', fontWeight: 700, color: 'var(--accent-cyan)', textDecoration: 'none', fontSize: '0.9375rem', transition: 'gap 0.2s ease' }}
+                  onMouseEnter={e => { e.currentTarget.style.gap = '0.625rem'; }}
+                  onMouseLeave={e => { e.currentTarget.style.gap = '0.375rem'; }}
+                >
+                  Запустити демо-іспит <ChevronRight size={18} />
+                </a>
+              </div>
+
+              {/* Screenshots */}
+              <div className="reveal" style={{ position: 'relative', width: '100%', maxWidth: '36rem' }}>
+                <div style={{ position: 'absolute', inset: '-3rem', background: 'radial-gradient(ellipse, var(--glow-blue) 0%, transparent 70%)', filter: 'blur(60px)' }} aria-hidden="true" />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', position: 'relative' }}>
+                  <Image src="/img/1000007884.jpg" alt="Вибір категорії ПДР у темній темі" width={250} height={445} loading="lazy"
+                    style={{ width: '100%', height: 'auto', borderRadius: '1.75rem', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)', transform: 'translateY(2rem)' }} />
+                  <Image src="/img/1000007834.jpg" alt="Результат іспиту ПДР 20 з 20" width={250} height={445} loading="lazy"
+                    style={{ width: '100%', height: 'auto', borderRadius: '1.75rem', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }} />
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
 
-        {/* ── FAQ ──────────────────────────────────────────────── */}
-        <section className="relative z-10 py-24 bg-slate-900/30 border-y border-white/5" aria-labelledby="faq-heading">
-          <div className="container mx-auto px-6 max-w-3xl">
-            <div className="text-center mb-12">
-              <h2 id="faq-heading" className="text-3xl lg:text-4xl font-bold mb-4">
-                Часті запитання (FAQ)
+        {/* ── HOW IT WORKS ──────────────────────────────────────── */}
+        <section id="how" style={{ position: 'relative', zIndex: 10, paddingTop: '6rem', paddingBottom: '6rem' }} aria-labelledby="how-heading">
+          <div className="container-xl">
+            <div className="reveal" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+              <div style={{ display: 'inline-block', padding: '0.25rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>Як це працює</div>
+              <h2 id="how-heading" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                4 кроки до{' '}
+                <span className="gradient-text">прав в кишені</span>
               </h2>
-              <p className="text-slate-400">Все, що потрібно знати перед стартом навчання.</p>
             </div>
 
-            <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
-              {faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="bg-slate-950/80 border border-slate-800 rounded-2xl overflow-hidden transition-all duration-300 hover:border-slate-700"
-                  itemScope
-                  itemProp="mainEntity"
-                  itemType="https://schema.org/Question"
-                >
-                  <button
-                    id={`faq-btn-${index}`}
-                    onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
-                    className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
-                    aria-expanded={openFaq === index}
-                    aria-controls={`faq-answer-${index}`}
-                  >
-                    <h3 className="font-semibold text-lg text-slate-200 pr-4" itemProp="name">
-                      {faq.q}
-                    </h3>
-                    <ChevronDown
-                      className={`w-5 h-5 text-cyan-500 shrink-0 transition-transform duration-300 ${
-                        openFaq === index ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  <div
-                    id={`faq-answer-${index}`}
-                    role="region"
-                    className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
-                      openFaq === index ? 'max-h-56 pb-5 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                    itemScope
-                    itemProp="acceptedAnswer"
-                    itemType="https://schema.org/Answer"
-                  >
-                    <p className="text-slate-400 leading-relaxed" itemProp="text">
-                      {faq.a}
-                    </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 14rem), 1fr))', gap: '1.5rem' }}>
+              {steps.map((s, i) => (
+                <div key={i} className={`reveal reveal-delay-${i + 1} glass-card`} style={{ padding: '2rem', borderRadius: '1.5rem', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', fontSize: '3.5rem', fontWeight: 900, color: 'var(--border-color)', lineHeight: 1, userSelect: 'none', transition: 'color 0.3s ease' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--badge-bg)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--border-color)')}
+                  >{s.num}</div>
+                  <div className="step-badge" style={{ marginBottom: '1.25rem' }}>{parseInt(s.num)}</div>
+                  <h3 style={{ fontWeight: 700, fontSize: '1.0625rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{s.title}</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.65 }}>{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── TESTIMONIALS ──────────────────────────────────────── */}
+        <section style={{ position: 'relative', zIndex: 10, paddingTop: '2rem', paddingBottom: '6rem' }} aria-labelledby="reviews-heading">
+          <div className="container-xl">
+            <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <div style={{ display: 'inline-block', padding: '0.25rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>Відгуки</div>
+              <h2 id="reviews-heading" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                Що кажуть{' '}
+                <span className="gradient-text">наші учні</span>
+              </h2>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 18rem), 1fr))', gap: '1.25rem' }}>
+              {testimonials.map((t, i) => (
+                <div key={i} className={`reveal reveal-delay-${i + 1} testimonial-card`}>
+                  {/* Stars */}
+                  <div style={{ display: 'flex', gap: '3px', marginBottom: '1rem' }}>
+                    {Array.from({ length: t.stars }).map((_, s) => <Star key={s} size={15} fill="#f59e0b" strokeWidth={0} />)}
+                  </div>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.7, marginBottom: '1.25rem', fontStyle: 'italic' }}>"{t.text}"</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
+                    <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '9999px', overflow: 'hidden', flexShrink: 0 }}>
+                      <Image src={`https://i.pravatar.cc/100?img=${t.avatar}`} alt={t.name} width={40} height={40} loading="lazy" />
+                    </div>
+                    <div>
+                      <p style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>{t.name}</p>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t.tag}</p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -473,60 +685,117 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ── CTA Final ────────────────────────────────────────── */}
-        <section className="relative z-10 py-24 container mx-auto px-6">
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden">
-            <div
-              className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/40 via-slate-900/0 to-transparent pointer-events-none"
-              aria-hidden="true"
-            />
+        {/* ── FAQ ───────────────────────────────────────────────── */}
+        <section id="faq" style={{ position: 'relative', zIndex: 10, paddingTop: '4rem', paddingBottom: '6rem' }} aria-labelledby="faq-heading">
+          <div className="container-xl">
+            <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <div style={{ display: 'inline-block', padding: '0.25rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>FAQ</div>
+              <h2 id="faq-heading" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                Часті запитання
+              </h2>
+            </div>
 
-            <Image
-              src="/img/logo.png"
-              alt="Лого ПДР України"
-              width={96}
-              height={96}
-              loading="lazy"
-              className="w-24 h-24 rounded-2xl mx-auto mb-8 animate-pulse-glow relative z-10 object-cover"
-            />
-
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6 relative z-10">
-              Твої права вже чекають
-            </h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10 relative z-10">
-              Приєднуйся до тисяч українців, які вже здали іспит на 20/20.
-              Почни безкоштовно прямо зараз у Telegram.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
-              <TelegramButton size="large" label="Відкрити бота в Telegram" />
+            <div className="reveal" style={{ maxWidth: '50rem', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+              itemScope itemType="https://schema.org/FAQPage">
+              {faqs.map((faq, index) => (
+                <div key={index}
+                  itemScope itemProp="mainEntity" itemType="https://schema.org/Question"
+                  style={{
+                    borderRadius: '1.25rem',
+                    border: '1px solid',
+                    borderColor: openFaq === index ? 'var(--border-hover)' : 'var(--border-color)',
+                    overflow: 'hidden',
+                    transition: 'border-color 0.3s ease',
+                    background: 'var(--bg-card)',
+                    backdropFilter: 'blur(10px)',
+                  }}>
+                  <button
+                    id={`faq-btn-${index}`}
+                    onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
+                    aria-expanded={openFaq === index}
+                    aria-controls={`faq-ans-${index}`}
+                    style={{ width: '100%', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+                  >
+                    <h3 style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--text-primary)', lineHeight: 1.4 }} itemProp="name">{faq.q}</h3>
+                    <ChevronDown size={18} style={{ color: 'var(--accent-cyan)', flexShrink: 0, transition: 'transform 0.3s ease', transform: openFaq === index ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                  </button>
+                  <div
+                    id={`faq-ans-${index}`}
+                    role="region"
+                    itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer"
+                    style={{
+                      maxHeight: openFaq === index ? '12rem' : '0',
+                      overflow: 'hidden',
+                      transition: 'max-height 0.35s ease, opacity 0.35s ease, padding 0.35s ease',
+                      opacity: openFaq === index ? 1 : 0,
+                      padding: openFaq === index ? '0 1.5rem 1.25rem' : '0 1.5rem 0',
+                    }}
+                  >
+                    <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: '0.9375rem' }} itemProp="text">{faq.a}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
+
+        {/* ── CTA FINAL ─────────────────────────────────────────── */}
+        <section style={{ position: 'relative', zIndex: 10, paddingTop: '2rem', paddingBottom: '6rem' }}>
+          <div className="container-xl">
+            <div className="reveal" style={{ position: 'relative', borderRadius: '2.5rem', overflow: 'hidden', padding: 'clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem)', textAlign: 'center', border: '1px solid var(--border-color)', background: 'var(--bg-card)', backdropFilter: 'blur(30px)' }}>
+              {/* Inner blobs */}
+              <div style={{ position: 'absolute', top: '-30%', left: '20%', width: '60%', height: '160%', background: 'radial-gradient(ellipse, var(--glow-cyan) 0%, transparent 60%)', pointerEvents: 'none' }} aria-hidden="true" />
+              <div style={{ position: 'absolute', bottom: '-20%', right: '10%', width: '40%', height: '100%', background: 'radial-gradient(ellipse, var(--glow-blue) 0%, transparent 60%)', pointerEvents: 'none' }} aria-hidden="true" />
+
+              <div style={{ position: 'relative', zIndex: 2 }}>
+                <div style={{ position: 'relative', display: 'inline-block', marginBottom: '1.5rem' }}>
+                  <div style={{ width: '5.5rem', height: '5.5rem', borderRadius: '1.5rem', overflow: 'hidden', margin: '0 auto' }} className="animate-pulse-glow">
+                    <Image src="/img/logo.png" alt="ПДР України" width={88} height={88} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ position: 'absolute', top: '-4px', right: '-4px', width: '1.25rem', height: '1.25rem', borderRadius: '9999px', background: 'linear-gradient(135deg, #10b981, #06b6d4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <CheckCircle2 size={12} color="white" />
+                  </div>
+                </div>
+
+                <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.75rem)', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '1rem', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                  Твої права вже чекають
+                </h2>
+                <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: 'var(--text-secondary)', maxWidth: '32rem', margin: '0 auto 2.5rem', lineHeight: 1.65 }}>
+                  Приєднуйся до 1 400+ українців, які вже здали іспит на 20/20. Перший крок — безкоштовно.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', alignItems: 'center' }}>
+                  <TelegramButton label="Відкрити бота в Telegram" size="lg" id="cta-final" />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Clock size={14} style={{ color: 'var(--text-muted)' }} />
+                    <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Старт за 10 секунд · Без реєстрації</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
 
-      {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="border-t border-white/5 bg-slate-950 py-12 relative z-10">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/img/logo.png"
-              alt="Логотип ПДР"
-              width={32}
-              height={32}
-              loading="lazy"
-              className="w-8 h-8 rounded-lg object-cover"
-            />
-            <span className="font-bold text-slate-300">ПДР України Bot</span>
+      {/* ── FOOTER ────────────────────────────────────────────── */}
+      <footer style={{ position: 'relative', zIndex: 10, borderTop: '1px solid var(--border-color)', background: 'var(--bg-secondary)', paddingTop: '2.5rem', paddingBottom: '2.5rem' }}>
+        <div className="container-xl" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+            <div style={{ width: '1.875rem', height: '1.875rem', borderRadius: '0.5rem', overflow: 'hidden' }}>
+              <Image src="/img/logo.png" alt="ПДР" width={30} height={30} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>ПДР України Bot</span>
           </div>
-          <div className="text-slate-500 text-sm">© 2026 Всі права захищені.</div>
-          <nav className="flex gap-6 text-sm" aria-label="Юридичні посилання">
-            <a href="#" className="text-slate-400 hover:text-cyan-400 transition-colors">
-              Договір оферти
-            </a>
-            <a href="#" className="text-slate-400 hover:text-cyan-400 transition-colors">
-              Політика конфіденційності
-            </a>
+          <nav style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {[['Договір оферти', '#'], ['Політика конфіденційності', '#'], ['Контакти', '#']].map(([label, href]) => (
+              <a key={label} href={href} style={{ fontSize: '0.875rem', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s ease' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-cyan)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
+              >{label}</a>
+            ))}
           </nav>
+          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>© 2026 ПДР України. Всі права захищені.</p>
         </div>
       </footer>
     </div>
