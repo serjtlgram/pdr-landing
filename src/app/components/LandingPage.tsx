@@ -156,11 +156,13 @@ function TelegramButton({
   id?: string;
   className?: string;
 }) {
-  const padding = {
-    sm: 'px-5 py-2.5 text-sm',
-    md: 'px-7 py-3.5 text-base',
-    lg: 'px-10 py-5 text-lg',
-  }[size];
+  // Explicit paddings that guarantee text never clips
+  const styles: Record<string, React.CSSProperties> = {
+    sm: { padding: '0.6rem 1.25rem', fontSize: '0.875rem', gap: '0.5rem' },
+    md: { padding: '0.85rem 1.75rem', fontSize: '1rem',    gap: '0.6rem' },
+    lg: { padding: '1.1rem 2.25rem',  fontSize: '1.125rem', gap: '0.75rem' },
+  };
+  const iconSize = size === 'lg' ? 20 : 18;
 
   return (
     <a
@@ -168,11 +170,18 @@ function TelegramButton({
       target="_blank"
       rel="noopener noreferrer"
       id={id}
-      className={`relative inline-flex items-center gap-2.5 ${padding} rounded-2xl font-bold btn-shimmer text-white transition-all duration-300 ${className}`}
+      className={`btn-shimmer text-white font-bold rounded-2xl transition-all duration-300 ${className}`}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        whiteSpace: 'nowrap',
+        flexShrink: 0,
+        ...styles[size],
+      }}
     >
-      <div className="pulse-ring opacity-0 group-hover:opacity-100" />
-      <Bot className="shrink-0" style={{ width: size === 'lg' ? '1.5rem' : '1.25rem', height: size === 'lg' ? '1.5rem' : '1.25rem' }} />
-      <span>{label}</span>
+      <Bot size={iconSize} style={{ flexShrink: 0 }} />
+      <span style={{ whiteSpace: 'nowrap' }}>{label}</span>
     </a>
   );
 }
@@ -317,14 +326,21 @@ function LandingInner({
             ))}
           </nav>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <ThemeToggle />
-            <TelegramButton label="Відкрити в Telegram" size="sm" id="cta-header" className="hidden sm:inline-flex" />
+          {/* Right controls — each item is isolated so nothing bleeds into neighbours */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', isolation: 'isolate' }}>
+            {/* Theme toggle — standalone, no overflow */}
+            <div style={{ position: 'relative', zIndex: 2, flexShrink: 0 }}>
+              <ThemeToggle />
+            </div>
+            {/* Telegram button — standalone, no overflow */}
+            <div style={{ position: 'relative', zIndex: 2, flexShrink: 0 }} className="hidden sm:block">
+              <TelegramButton label="Відкрити в Telegram" size="sm" id="cta-header" />
+            </div>
             {/* Mobile menu btn */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Меню"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '2.25rem', height: '2.25rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--bg-glass)', color: 'var(--text-primary)', cursor: 'pointer' }}
+              style={{ position: 'relative', zIndex: 2, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '2.5rem', height: '2.5rem', borderRadius: '0.625rem', border: '1px solid var(--border-color)', background: 'var(--bg-glass)', color: 'var(--text-primary)', cursor: 'pointer' }}
               className="sm:hidden"
             >
               {menuOpen ? <X size={18} /> : <Menu size={18} />}

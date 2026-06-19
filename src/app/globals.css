@@ -350,14 +350,6 @@ body {
   opacity: 0.4;
 }
 
-/* Glow button pulse ring */
-.pulse-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 2px solid var(--accent-cyan);
-  animation: ping-slow 2s ease-out infinite;
-}
 
 /* Section divider */
 .section-divider {
