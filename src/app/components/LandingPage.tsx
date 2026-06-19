@@ -474,8 +474,8 @@ function LandingInner({
                 <div className="animate-float" style={{ position: 'relative' }}>
                   <div className="gradient-border" style={{ borderRadius: '2.5rem', display: 'inline-block', width: '100%' }}>
                     <Image
-                      src="/img/1000007882.jpg"
-                      alt="Інтерфейс ПДР України в Telegram — головний екран з неоновим дизайном"
+                      src={theme === 'dark' ? '/img/1000007882.jpg' : '/img/1000007883.jpg'}
+                      alt="Інтерфейс ПДР України в Telegram"
                       width={380}
                       height={680}
                       priority
@@ -628,9 +628,9 @@ function LandingInner({
               <div className="reveal" style={{ position: 'relative', width: '100%', maxWidth: '36rem' }}>
                 <div style={{ position: 'absolute', inset: '-3rem', background: 'radial-gradient(ellipse, var(--glow-blue) 0%, transparent 70%)', filter: 'blur(60px)' }} aria-hidden="true" />
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', position: 'relative' }}>
-                  <Image src="/img/1000007884.jpg" alt="Вибір категорії ПДР у темній темі" width={250} height={445} loading="lazy"
+                  <Image src={theme === 'dark' ? '/img/1000007884.jpg' : '/img/1000007886.jpg'} alt="Вибір категорії ПДР" width={250} height={445} loading="lazy"
                     style={{ width: '100%', height: 'auto', borderRadius: '1.75rem', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)', transform: 'translateY(2rem)' }} />
-                  <Image src="/img/1000007834.jpg" alt="Результат іспиту ПДР 20 з 20" width={250} height={445} loading="lazy"
+                  <Image src={theme === 'dark' ? '/img/1000007834.jpg' : '/img/1000007885.jpg'} alt="Результат іспиту ПДР" width={250} height={445} loading="lazy"
                     style={{ width: '100%', height: 'auto', borderRadius: '1.75rem', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }} />
                 </div>
               </div>
