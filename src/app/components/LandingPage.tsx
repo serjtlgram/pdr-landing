@@ -221,8 +221,9 @@ export default function LandingPage() {
   const steps = [
     { num: '01', title: 'Відкрий у Telegram', desc: 'Натисни кнопку — і бот одразу в твоєму месенджері. Жодної реєстрації.' },
     { num: '02', title: 'Обери категорію', desc: 'A, B, C, D або одразу всі теми. Навчайся по розділах або в режимі Марафону.' },
-    { num: '03', title: 'Вчи розумно', desc: 'ШІ фіксує помилки і змушує повторювати тільки складне. Ніякого зазубрювання.' },
-    { num: '04', title: 'Здай на 20/20', desc: 'Пройди симулятор 5 разів поспіль — і йди на реальний іспит впевнено.' },
+    { num: '03', title: 'Робота над помилками', desc: 'Бот автоматично збирає твої помилки. Повторюй їх по другому колу, доки не відповіси правильно.' },
+    { num: '04', title: 'Зберігай у закладки', desc: 'Зберігай підступні запитання в закладки в один клік. Повертайся до них у будь-який момент для закріплення.' },
+    { num: '05', title: 'Здай на 20/20', desc: 'Пройди симулятор 5 разів поспіль — і йди на реальний іспит впевнено.' },
   ];
 
   const testimonials = [
@@ -645,7 +646,7 @@ function LandingInner({
             <div className="reveal" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
               <div style={{ display: 'inline-block', padding: '0.25rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>Як це працює</div>
               <h2 id="how-heading" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-                4 кроки до{' '}
+                5 кроків до{' '}
                 <span className="gradient-text">прав в кишені</span>
               </h2>
             </div>
