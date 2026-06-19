@@ -170,7 +170,7 @@ function TelegramButton({
       target="_blank"
       rel="noopener noreferrer"
       id={id}
-      className={`btn-shimmer text-white font-bold rounded-2xl transition-all duration-300 ${className}`}
+      className={`btn-shimmer text-white font-bold rounded-2xl transition-all duration-300 animate-glow-ring ${className}`}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
