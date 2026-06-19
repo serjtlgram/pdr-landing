@@ -106,6 +106,7 @@ const schemaData = {
       applicationCategory: 'EducationalApplication',
       description:
         'Персональний ШІ-репетитор з ПДР України у Telegram. Офіційні питання МВС 2026 року, симулятор іспиту та розумна аналітика помилок.',
+      image: `${SITE_URL}/og-image.jpg`,
       url: TELEGRAM_URL,
       offers: {
         '@type': 'Offer',
@@ -155,6 +156,14 @@ const schemaData = {
           acceptedAnswer: {
             '@type': 'Answer',
             text: "Базовий доступ для ознайомлення з питаннями — безкоштовний. Для доступу до глибокої аналітики, розумної роботи над помилками та режиму 'Марафон' є Pro-версія.",
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'На яких категоріях можна готуватися?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Додаток підтримує категорії A, B, C та D. Ти можеш обирати конкретну категорію або практикувати всі одночасно в режимі Марафон.',
           },
         },
       ],

@@ -313,11 +313,10 @@ function LandingInner({
           </a>
 
           {/* Desktop nav */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <nav aria-label="Головна навігація" className="hidden md:flex" style={{ alignItems: 'center', gap: '0.25rem' }}>
             {[['#features', 'Переваги'], ['#how', 'Як це'], ['#faq', 'FAQ']].map(([href, label]) => (
               <a key={href} href={href}
-                style={{ display: 'none', padding: '0.375rem 0.875rem', fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none', borderRadius: '0.5rem', transition: 'color 0.2s' }}
-                className="md-nav-link"
+                style={{ display: 'inline-block', padding: '0.4rem 0.875rem', fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none', borderRadius: '0.5rem', transition: 'color 0.2s' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-cyan)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-secondary)')}
               >
@@ -732,7 +731,8 @@ function LandingInner({
                     aria-controls={`faq-ans-${index}`}
                     style={{ width: '100%', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
                   >
-                    <h3 style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--text-primary)', lineHeight: 1.4 }} itemProp="name">{faq.q}</h3>
+                    {/* span замість h3 — h3 не валідний всередині button */}
+                    <span role="heading" aria-level={3} style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--text-primary)', lineHeight: 1.4 }} itemProp="name">{faq.q}</span>
                     <ChevronDown size={18} style={{ color: 'var(--accent-cyan)', flexShrink: 0, transition: 'transform 0.3s ease', transform: openFaq === index ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                   </button>
                   <div
@@ -756,7 +756,7 @@ function LandingInner({
         </section>
 
         {/* ── CTA FINAL ─────────────────────────────────────────── */}
-        <section style={{ position: 'relative', zIndex: 10, paddingTop: '2rem', paddingBottom: '6rem' }}>
+        <section aria-label="Заклик до дії — відкрити застосунок" style={{ position: 'relative', zIndex: 10, paddingTop: '2rem', paddingBottom: '6rem' }}>
           <div className="container-xl">
             <div className="reveal" style={{ position: 'relative', borderRadius: '2.5rem', overflow: 'hidden', padding: 'clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem)', textAlign: 'center', border: '1px solid var(--border-color)', background: 'var(--bg-card)', backdropFilter: 'blur(30px)' }}>
               {/* Inner blobs */}
