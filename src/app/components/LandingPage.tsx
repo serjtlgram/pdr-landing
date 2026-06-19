@@ -651,9 +651,9 @@ function LandingInner({
               </h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 14rem), 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 12rem), 1fr))', gap: '1rem' }}>
               {steps.map((s, i) => (
-                <div key={i} className={`reveal reveal-delay-${i + 1} glass-card`} style={{ padding: '2rem', borderRadius: '1.5rem', position: 'relative', overflow: 'hidden' }}>
+                <div key={i} className={`reveal reveal-delay-${i + 1} glass-card`} style={{ padding: '1.5rem', borderRadius: '1.5rem', position: 'relative', overflow: 'hidden' }}>
                   <div style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', fontSize: '3.5rem', fontWeight: 900, color: 'var(--border-color)', lineHeight: 1, userSelect: 'none', transition: 'color 0.3s ease' }}
                     onMouseEnter={e => (e.currentTarget.style.color = 'var(--badge-bg)')}
                     onMouseLeave={e => (e.currentTarget.style.color = 'var(--border-color)')}
