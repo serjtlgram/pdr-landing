@@ -146,7 +146,7 @@ function ThemeToggle() {
 
 /* ─── CTA BUTTON ─────────────────────────────────────────────────────── */
 function TelegramButton({
-  label = 'Почати безкоштовно',
+  label = 'Почати тестування безкоштовно',
   size = 'md',
   id = 'cta-main',
   className = '',
@@ -210,12 +210,12 @@ export default function LandingPage() {
   ];
 
   const features = [
-    { icon: <Smartphone />, color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', title: 'Без завантажень', desc: "Навчайся прямо в Telegram. Ніяких зайвих додатків — економить пам'ять телефону." },
-    { icon: <ShieldCheck />, color: '#06b6d4', bg: 'rgba(6,182,212,0.12)', title: 'Офіційні питання', desc: '100% відповідність базі МВС 2026 року. Автоматичне оновлення при змінах.' },
-    { icon: <BarChart3 />, color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)', title: 'Розумна аналітика', desc: "ШІ-алгоритм запам'ятовує твої помилки та акцентує на складних темах." },
-    { icon: <Target />, color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', title: 'Симулятор іспиту', desc: '20 питань за 20 хвилин — точна копія реального іспиту в МВС.' },
-    { icon: <TrendingUp />, color: '#10b981', bg: 'rgba(16,185,129,0.12)', title: 'Прогрес 0→100%', desc: 'Відстежуй готовність у відсотках. Бачиш точно, чи готовий до іспиту.' },
-    { icon: <Moon />, color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', title: 'Темна / Світла тема', desc: 'Як у нашому міні-апп — комфортне навчання вдень і вночі.' },
+    { icon: <Smartphone />, color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', title: 'Робота в офлайн-режимі', desc: "Після завантаження питань у Telegram, додаток кешує дані, економлячи трафік та працюючи навіть при поганому зв'язку." },
+    { icon: <ShieldCheck />, color: '#06b6d4', bg: 'rgba(6,182,212,0.12)', title: 'Офіційні тести ПСЦ МВС', desc: '100% відповідність офіційній базі pdr.infotech.gov.ua на 2026 рік. Автоматичне оновлення при змінах.' },
+    { icon: <BarChart3 />, color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)', title: 'ШІ-помічник та статистика', desc: "Алгоритм ШІ аналізує твою успішність, дає зрозумілі пояснення до помилок та формує персональну статистику." },
+    { icon: <Target />, color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', title: 'Режим як у Сервісному Центрі', desc: 'Симулятор іспиту: 20 питань за 20 хвилин, максимум 2 помилки — точна копія екзамену в МВС.' },
+    { icon: <BookOpen />, color: '#10b981', bg: 'rgba(16,185,129,0.12)', title: 'Дорожні знаки та штрафи', desc: 'Окремий зручний довідник по всіх дорожніх знаках України та актуальних штрафах ПДР онлайн.' },
+    { icon: <Moon />, color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', title: 'Темна / Світла тема', desc: 'Комфортне вивчення ПДР вдень і вночі безпосередньо у твоєму смартфоні.' },
   ];
 
   const steps = [
@@ -233,11 +233,12 @@ export default function LandingPage() {
   ];
 
   const faqs = [
-    { q: 'Чи відповідають питання офіційній базі МВС?', a: 'Так, абсолютно. Наша база на 100% синхронізована з актуальними питаннями Головного Сервісного Центру МВС України на 2026 рік. Якщо питання змінюються, вони автоматично оновлюються у додатку.' },
-    { q: 'Чи потрібно щось завантажувати на телефон?', a: "Ні. Увесь процес навчання проходить у Telegram. Це економить пам'ять і дозволяє вчити ПДР на будь-якому пристрої, де встановлено Telegram." },
-    { q: 'Як працює симулятор іспиту?', a: 'Симулятор відтворює умови реального іспиту: 20 хвилин на 20 випадкових питань, максимум 2 помилки. Рекомендуємо пройти його мінімум 5 разів поспіль.' },
-    { q: 'Скільки коштує користування додатком?', a: "Базовий доступ — безкоштовний. Pro-версія з глибокою аналітикою, ШІ-поясненнями та режимом Марафон обійдеться дешевше, ніж одна перездача в МВС." },
-    { q: 'На яких категоріях можна готуватися?', a: 'Додаток підтримує категорії A, B, C та D. Ти можеш обирати конкретну категорію або практикувати всі одночасно в режимі Марафон.' },
+    { q: 'Як підготуватися до іспиту ПДР?', a: 'Для успішної підготовки до іспиту з ПДР необхідно регулярно проходити офіційні тести ПДР онлайн. Наш додаток використовує актуальну базу 2026 року та надає режим симулятора іспиту, що максимально наближений до умов складання в ГСЦ МВС.' },
+    { q: 'Чи збігаються тести з екзаменом у Сервісному центрі?', a: 'Так, абсолютно. Наша база — це офіційні білети ПСЦ МВС (100% відповідність). Якщо питання змінюються на офіційному іспиті (pdr.infotech.gov.ua), вони миттєво оновлюються у нашому додатку.' },
+    { q: 'Чи потрібно щось завантажувати на телефон?', a: "Ні. Увесь процес навчання проходить безпосередньо у вашому месенджері Telegram. Додаток використовує кешування для швидкої роботи та економить пам'ять телефону." },
+    { q: 'Як працює симулятор іспиту?', a: 'Симулятор повністю відтворює умови реального іспиту в ГСЦ МВС: вам дається 20 хвилин на 20 випадкових питань. Для успішної здачі можна зробити не більше 2 помилок.' },
+    { q: 'Скільки коштує користування додатком?', a: "Базовий доступ для ознайомлення з питаннями — безкоштовний. Для доступу до глибокої аналітики, розумної роботи над помилками та режиму 'Марафон' є Pro-версія." },
+    { q: 'Багато хто шукає ПДД онлайн, але яка офіційна назва?', a: 'Офіційна назва українською мовою — Правила дорожнього руху (ПДР). Незважаючи на те, що багато користувачів шукають "ПДД тесты онлайн 2026 Украина" або "билеты ПДД 2026", наш додаток надає матеріали українською мовою згідно з вимогами законодавства, але інтуїтивно зрозумілий для всіх.' },
   ];
 
   return (
@@ -393,7 +394,7 @@ function LandingInner({
                 <h1
                   id="hero-heading"
                   style={{
-                    fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+                    fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
                     fontWeight: 900,
                     lineHeight: 1.08,
                     letterSpacing: '-0.02em',
@@ -401,18 +402,17 @@ function LandingInner({
                     color: 'var(--text-primary)',
                   }}
                 >
-                  Здай іспит з ПДР на{' '}
-                  <span className="gradient-text-animated">20/20</span>
-                  <br />з першого разу
+                  Офіційні тести ПДР України{' '}
+                  <span className="gradient-text-animated">2026 онлайн</span>
                 </h1>
 
                 <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '2.5rem', maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto' }}>
-                  Персональний ШІ-репетитор прямо в Telegram. Офіційні тести МВС, симулятор іспиту та розумна аналітика помилок. Без реєстрації та завантажень.
+                  Готуйтеся до іспиту ПДР 2026 онлайн! 100% відповідність офіційній базі ГСЦ МВС. Мобільний додаток у Telegram, ШІ-аналітика помилок та симулятор реального іспиту.
                 </p>
 
                 {/* CTA buttons */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', justifyContent: 'center', marginBottom: '2.5rem' }}>
-                  <TelegramButton label="Почати безкоштовно" size="lg" id="cta-hero-main" className="group" />
+                  <TelegramButton label="Почати тестування безкоштовно" size="lg" id="cta-hero-main" className="group" />
                   <a
                     href="#how"
                     id="cta-how"
@@ -476,7 +476,7 @@ function LandingInner({
                   <div className="gradient-border" style={{ borderRadius: '2.5rem', display: 'inline-block', width: '100%' }}>
                     <Image
                       src={theme === 'dark' ? '/img/1000007882.jpg' : '/img/1000007883.jpg'}
-                      alt="Інтерфейс ПДР України в Telegram"
+                      alt="Інтерфейс додатку тести ПДР онлайн 2026"
                       width={380}
                       height={680}
                       priority
@@ -563,9 +563,9 @@ function LandingInner({
             <div className="reveal" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
               <div style={{ display: 'inline-block', padding: '0.25rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>Можливості</div>
               <h2 id="features-heading" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.875rem', letterSpacing: '-0.02em' }}>
-                Чому{' '}
-                <span className="gradient-text">наш Mini App</span>
-                {' '}— кращий вибір
+                Мобільний додаток{' '}
+                <span className="gradient-text">ПДР 2026</span>
+                {': Підготовка до іспиту'}
               </h2>
               <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7, fontSize: '1.0625rem' }}>
                 Жодних нудних лекцій. Тільки практика, яка реально доводить до результату 20 з 20.
@@ -629,9 +629,9 @@ function LandingInner({
               <div className="reveal" style={{ position: 'relative', width: '100%', maxWidth: '36rem' }}>
                 <div style={{ position: 'absolute', inset: '-3rem', background: 'radial-gradient(ellipse, var(--glow-blue) 0%, transparent 70%)', filter: 'blur(60px)' }} aria-hidden="true" />
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', position: 'relative' }}>
-                  <Image src={theme === 'dark' ? '/img/1000007884.jpg' : '/img/1000007886.jpg'} alt="Вибір категорії ПДР" width={250} height={445} loading="lazy"
+                  <Image src={theme === 'dark' ? '/img/1000007884.jpg' : '/img/1000007886.jpg'} alt="Вибір категорії в онлайн тестах ПДР 2026" width={250} height={445} loading="lazy"
                     style={{ width: '100%', height: 'auto', borderRadius: '1.75rem', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)', transform: 'translateY(2rem)' }} />
-                  <Image src={theme === 'dark' ? '/img/1000007834.jpg' : '/img/1000007885.jpg'} alt="Результат іспиту ПДР" width={250} height={445} loading="lazy"
+                  <Image src={theme === 'dark' ? '/img/1000007834.jpg' : '/img/1000007885.jpg'} alt="Результат офіційного іспиту ПДР МВС 2026" width={250} height={445} loading="lazy"
                     style={{ width: '100%', height: 'auto', borderRadius: '1.75rem', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }} />
                 </div>
               </div>
@@ -707,7 +707,7 @@ function LandingInner({
             <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <div style={{ display: 'inline-block', padding: '0.25rem 0.875rem', borderRadius: '9999px', background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', marginBottom: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>FAQ</div>
               <h2 id="faq-heading" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-                Часті запитання
+                Часті питання / FAQ
               </h2>
             </div>
 
