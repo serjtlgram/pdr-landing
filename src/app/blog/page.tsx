@@ -48,7 +48,7 @@ export default function BlogIndex() {
               </div>
 
               {/* Title */}
-              <h2 className="group-hover:text-[var(--accent-cyan)] transition-colors duration-300" style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem', lineHeight: 1.3 }}>
+              <h2 className="text-[var(--text-primary)] group-hover:text-[var(--accent-cyan)] transition-colors duration-300" style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '1rem', lineHeight: 1.3 }}>
                 <Link href={`/${post.slug}`} className="focus:outline-none" style={{ color: 'inherit', textDecoration: 'none' }}>
                   <span className="absolute inset-0 z-10" aria-hidden="true" />
                   {post.title}
