@@ -32,40 +32,44 @@ export default function BlogIndex() {
           {posts.map((post, idx) => (
             <article 
               key={post.slug} 
-              className="group relative flex flex-col items-start justify-between rounded-[2rem] bg-[var(--bg-card)] p-8 md:p-10 border border-[var(--border-color)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-[var(--accent-cyan)]"
+              className="glass-card hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(6,182,212,0.15)] hover:border-[var(--accent-cyan)] transition-all duration-300 relative group flex flex-col"
+              style={{ padding: '2rem', borderRadius: '2rem' }}
             >
-              <div className="flex-1 w-full relative z-10 pointer-events-none">
-                {/* Title */}
-                <h2 className="text-[22px] md:text-[26px] font-bold text-[var(--text-primary)] mb-6 leading-[1.3] group-hover:text-[var(--accent-cyan)] transition-colors pointer-events-auto">
-                  <Link href={`/${post.slug}`} className="focus:outline-none">
-                    <span className="absolute inset-0 z-0" aria-hidden="true" />
-                    {post.title}
-                  </Link>
-                </h2>
-
-                {/* Excerpt */}
-                <p className="text-[16px] md:text-[17px] leading-[1.7] text-[var(--text-secondary)] line-clamp-4 opacity-90 mb-8">
-                  {post.description}
-                </p>
+              {/* Top Row: Icon & Category */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1.5rem', width: '100%', position: 'relative', zIndex: 10, pointerEvents: 'none' }}>
+                <div className="feature-icon-wrap" style={{ background: 'var(--badge-bg)', color: 'var(--accent-cyan)', margin: 0 }}>
+                  <BookOpen size={24} />
+                </div>
+                <div style={{ background: 'var(--badge-bg)', border: '1px solid var(--badge-border)', padding: '0.4rem 0.8rem', borderRadius: '999px' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent-cyan)' }}>
+                    {post.category}
+                  </span>
+                </div>
               </div>
 
-              {/* Bottom Action / Meta Row */}
-              <div className="mt-auto pt-2 flex flex-wrap items-center gap-4 md:gap-5 w-full relative z-10 pointer-events-none">
-                {/* Category Pill */}
-                <span className="inline-block px-3 py-1 rounded-[4px] bg-[#60a5fa] text-white text-[11px] font-bold uppercase tracking-wider">
-                  {post.category}
-                </span>
+              {/* Title */}
+              <h2 className="group-hover:text-[var(--accent-cyan)] transition-colors duration-300" style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem', lineHeight: 1.3, position: 'relative', zIndex: 20 }}>
+                <Link href={`/${post.slug}`} className="focus:outline-none" style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <span className="absolute inset-0" aria-hidden="true" />
+                  {post.title}
+                </Link>
+              </h2>
 
-                {/* Read Time / Eye */}
-                <div className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--text-secondary)] opacity-70">
-                  <Clock size={16} />
-                  <span>{post.readTime}</span>
-                </div>
+              {/* Excerpt */}
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, flexGrow: 1, marginBottom: '2rem', position: 'relative', zIndex: 10, pointerEvents: 'none' }}>
+                {post.description}
+              </p>
 
-                {/* Date */}
-                <span className="text-[13px] font-semibold text-[var(--text-secondary)] opacity-70 uppercase tracking-wide">
-                  {post.date}
-                </span>
+              {/* Bottom Meta */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem', marginTop: 'auto', width: '100%', position: 'relative', zIndex: 10, pointerEvents: 'none' }}>
+                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600 }}>
+                   <Clock size={16} />
+                   <span>{post.readTime} читання</span>
+                 </div>
+                 <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--text-secondary)', opacity: 0.5 }}></div>
+                 <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                   {post.date}
+                 </span>
               </div>
             </article>
           ))}
