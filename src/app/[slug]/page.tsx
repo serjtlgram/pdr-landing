@@ -60,27 +60,22 @@ export default async function BlogPostPage({
               <span className="text-[13px] text-[var(--text-secondary)] font-semibold">{post.readTime} читання</span>
             </div>
             
-            <h1 className="text-[2.25rem] md:text-[3.5rem] font-black text-[var(--text-primary)] mb-8 leading-[1.15] tracking-tight">
+            <h1 className="text-[2.25rem] md:text-[3.5rem] font-black text-[var(--text-primary)] pb-8 mb-12 border-b border-[var(--border-color)] leading-[1.15] tracking-tight">
               {post.title}
             </h1>
-            
-            <div className="flex items-center gap-3 pb-8 border-b border-[var(--border-color)]">
-              <img src={post.authorAvatar} alt={post.author} className="w-10 h-10 rounded-full border border-[var(--border-color)] object-cover shadow-sm" />
-              <span className="text-[0.95rem] font-bold text-[var(--text-primary)]">{post.author}</span>
-            </div>
           </header>
 
           {/* Article Content */}
           <article className="prose dark:prose-invert prose-lg max-w-none 
             prose-headings:font-bold prose-headings:text-[var(--text-primary)] prose-headings:tracking-tight
-            prose-h2:text-[1.8rem] prose-h2:mt-12 prose-h2:mb-6
-            prose-h3:text-[1.4rem] prose-h3:mt-8 prose-h3:mb-4
-            prose-p:text-[var(--text-secondary)] prose-p:leading-[1.8] prose-p:mb-6
+            prose-h2:text-[2rem] prose-h2:font-black prose-h2:mt-16 prose-h2:mb-8 prose-h2:border-b prose-h2:border-[var(--border-color)] prose-h2:pb-4
+            prose-h3:text-[1.5rem] prose-h3:mt-10 prose-h3:mb-6
+            prose-p:text-[var(--text-secondary)] prose-p:text-[1.1rem] prose-p:leading-[1.85] prose-p:mb-8
             prose-a:text-[var(--accent-blue)] hover:prose-a:text-[var(--accent-cyan)] prose-a:transition-colors prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-[var(--text-primary)] prose-strong:font-bold
+            prose-strong:text-[var(--text-primary)] prose-strong:font-extrabold
             prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6
-            prose-li:text-[var(--text-secondary)] prose-li:my-2 prose-li:leading-[1.8]
-            prose-blockquote:border-l-[4px] prose-blockquote:border-[var(--accent-cyan)] prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-[var(--text-secondary)] prose-blockquote:bg-[var(--bg-glass)] prose-blockquote:py-3 prose-blockquote:pr-4 prose-blockquote:rounded-r-xl"
+            prose-li:text-[var(--text-secondary)] prose-li:text-[1.1rem] prose-li:my-3 prose-li:leading-[1.8] prose-li:marker:text-[var(--accent-cyan)] prose-li:marker:font-bold
+            prose-blockquote:border-l-[4px] prose-blockquote:border-[var(--accent-cyan)] prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-[var(--text-secondary)] prose-blockquote:bg-[var(--bg-glass)] prose-blockquote:py-4 prose-blockquote:pr-6 prose-blockquote:rounded-r-xl"
           >
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {post.content}
@@ -88,10 +83,10 @@ export default async function BlogPostPage({
           </article>
 
           {/* Bottom CTA Card */}
-          <div className="mt-20">
-            <div className="glass-card rounded-[2rem] p-8 md:p-12 text-center relative overflow-hidden" style={{ border: '1px solid var(--border-color)', background: 'var(--bg-card)' }}>
+          <div className="mt-32 mb-10">
+            <div className="glass-card rounded-[2.5rem] relative overflow-hidden shadow-2xl" style={{ border: '1px solid var(--border-color)', background: 'var(--bg-card)', padding: '4rem 2.5rem', textAlign: 'center' }}>
               {/* Decorative background glow */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-md h-32 bg-[var(--accent-cyan)] opacity-10 blur-[60px] pointer-events-none"></div>
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-40 bg-[var(--accent-cyan)] opacity-[0.15] blur-[80px] pointer-events-none"></div>
               
               <div className="relative z-10">
                 <h3 className="text-2xl md:text-[2rem] font-extrabold text-[var(--text-primary)] mb-4 tracking-tight">Готуєшся до іспиту ПДР?</h3>
