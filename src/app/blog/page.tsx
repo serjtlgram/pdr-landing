@@ -27,20 +27,15 @@ export default function BlogIndex() {
       <SiteHeader />
       
       {/* Increased top padding (pt-44 md:pt-52) to guarantee ZERO header overlap */}
-      <main className="container-xl max-w-7xl pt-44 md:pt-52 pb-24 relative z-10">
+      <main className="container-xl" style={{ maxWidth: '80rem', paddingTop: '10rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
         
         {/* Page Header */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--badge-bg)] border border-[var(--badge-border)] mb-6 shadow-sm">
-            <BookOpen size={14} className="text-[var(--accent-cyan)]" />
-            <span className="text-xs font-bold uppercase tracking-widest text-[var(--accent-cyan)]">Офіційний блог та новини</span>
-          </div>
-          
-          <h1 className="text-4xl md:text-6xl font-black mb-6 text-theme-primary tracking-tight leading-tight">
-            База <span className="gradient-text">Знань ПДР 2026</span>
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem', maxWidth: '48rem', marginLeft: 'auto', marginRight: 'auto' }}>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, marginBottom: '1.25rem', color: 'var(--text-primary)', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+            База <span className="gradient-text-animated">Знань ПДР 2026</span>
           </h1>
           
-          <p className="text-theme-secondary text-base md:text-xl leading-relaxed">
+          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: '38rem', marginLeft: 'auto', marginRight: 'auto' }}>
             Актуальні зміни в законах, розбір складних питань та корисні поради для впевненого складання іспиту у ГСЦ МВС.
           </p>
         </div>

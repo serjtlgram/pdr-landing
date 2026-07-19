@@ -40,7 +40,7 @@ export default async function BlogPostPage({
       <BackgroundEffects />
       <SiteHeader />
       
-      <main className="container-xl max-w-3xl pt-40 md:pt-48 pb-24 relative z-10">
+      <main className="container-xl max-w-3xl" style={{ paddingTop: '10rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
         <Link href="/blog" className="inline-flex items-center gap-2 text-theme-secondary hover:text-[var(--accent-cyan)] transition-colors mb-8 font-medium">
           <ChevronLeft size={20} />
           <span>До списку статей</span>
