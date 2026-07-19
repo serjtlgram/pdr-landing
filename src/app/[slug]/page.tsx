@@ -49,7 +49,7 @@ export default async function BlogPostPage({
           </Link>
           
           {/* Article Header */}
-          <header className="mb-12">
+          <header className="mb-12" style={{ marginBottom: '3.5rem' }}>
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <span className="inline-block px-3 py-1 rounded-[6px] bg-[#f0f9ff] dark:bg-[rgba(2,132,199,0.15)] text-[#0284c7] dark:text-[#38bdf8] text-[11px] font-bold uppercase tracking-widest">
                 {post.category}
@@ -65,7 +65,7 @@ export default async function BlogPostPage({
               </div>
             </div>
             
-            <h1 className="text-[2.25rem] md:text-[3.5rem] font-black text-[var(--text-primary)] mb-8 leading-[1.15] tracking-tight">
+            <h1 className="text-[2.25rem] md:text-[3.5rem] font-black text-[var(--text-primary)] leading-[1.15] tracking-tight" style={{ marginBottom: '2.5rem' }}>
               {post.title}
             </h1>
             <div className="w-16 h-[4px] bg-[#0284c7] rounded-full"></div>
@@ -108,9 +108,7 @@ export default async function BlogPostPage({
           {/* Article Content */}
           <article className="prose dark:prose-invert prose-lg max-w-none 
             prose-headings:font-bold prose-headings:text-[var(--text-primary)] prose-headings:tracking-tight
-            prose-h2:text-[1.8rem] prose-h2:font-black prose-h2:mt-12 prose-h2:mb-6
             prose-h3:text-[1.5rem] prose-h3:mt-10 prose-h3:mb-6
-            prose-p:text-[var(--text-secondary)] prose-p:text-[1.1rem] prose-p:leading-[1.85] prose-p:mb-8
             prose-a:text-[var(--accent-blue)] hover:prose-a:text-[var(--accent-cyan)] prose-a:transition-colors prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
             prose-strong:text-[var(--text-primary)] prose-strong:font-extrabold
             prose-ul:list-disc prose-ul:pl-6
@@ -119,6 +117,8 @@ export default async function BlogPostPage({
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               components={{
+                h2: ({node, ...props}) => <h2 className="text-[2rem] font-black text-[var(--text-primary)] tracking-tight" style={{ marginTop: '4.5rem', marginBottom: '2rem' }} {...props} />,
+                p: ({node, ...props}) => <p className="text-[1.1rem] leading-[1.85] text-[var(--text-secondary)]" style={{ marginBottom: '2.5rem' }} {...props} />,
                 ol: ({node, ...props}) => <ol className="custom-ordered-list" {...props} />,
                 li: ({node, ...props}) => <li {...props} />
               }}
