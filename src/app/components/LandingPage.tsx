@@ -230,8 +230,8 @@ function LandingInner({
                     color: 'var(--text-primary)',
                   }}
                 >
-                  Офіційні тести ПДР 2026<br className="hidden md:block" />{' '}
-                  <span className="gradient-text-animated">у Telegram</span>
+                  Офіційні тести ПДР<br className="hidden md:block" />{' '}
+                  <span className="gradient-text-animated">2026 у Telegram-бот</span>
                 </h1>
 
                 <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '2.5rem', maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto' }}>
