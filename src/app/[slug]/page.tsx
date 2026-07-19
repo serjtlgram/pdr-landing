@@ -3,7 +3,7 @@ import { getPostBySlug, getPostSlugs } from '@/lib/blog';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
-import { ChevronLeft, Clock } from 'lucide-react';
+import { ChevronLeft, Clock, Calendar } from 'lucide-react';
 import { Metadata } from 'next';
 import { SiteHeader, BackgroundEffects, TelegramButton } from '@/app/components/SharedUI';
 
@@ -43,41 +43,86 @@ export default async function BlogPostPage({
       <main className="container-xl" style={{ paddingTop: '8rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
         <div style={{ maxWidth: '48rem', margin: '0 auto' }}>
           {/* Back Button */}
-          <Link href="/blog" className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] transition-colors mb-10 font-semibold text-sm">
-            <ChevronLeft size={18} />
+          <Link href="/blog" className="inline-flex items-center gap-2 text-[#0284c7] hover:text-[#0369a1] transition-colors mb-10 font-semibold text-sm">
+            <ChevronLeft size={18} strokeWidth={2.5} />
             <span>До списку статей</span>
           </Link>
           
           {/* Article Header */}
-          <header className="mb-14">
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <span className="inline-block px-3 py-1 rounded-[6px] bg-[rgba(6,182,212,0.12)] text-[var(--accent-cyan)] text-[11px] font-extrabold uppercase tracking-widest">
+          <header className="mb-12">
+            <div className="flex flex-wrap items-center gap-4 mb-8">
+              <span className="inline-block px-3 py-1 rounded-[6px] bg-[#f0f9ff] dark:bg-[rgba(2,132,199,0.15)] text-[#0284c7] dark:text-[#38bdf8] text-[11px] font-bold uppercase tracking-widest">
                 {post.category}
               </span>
-              <span className="text-[var(--text-secondary)] opacity-40">•</span>
-              <span className="text-[13px] text-[var(--text-secondary)] font-semibold">{post.date}</span>
-              <span className="text-[var(--text-secondary)] opacity-40">•</span>
-              <span className="text-[13px] text-[var(--text-secondary)] font-semibold">{post.readTime} читання</span>
+              <div className="flex items-center gap-1.5 text-[13px] text-slate-500 dark:text-slate-400 font-medium">
+                <Calendar size={14} />
+                <span>{post.date}</span>
+              </div>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
+              <div className="flex items-center gap-1.5 text-[13px] text-slate-500 dark:text-slate-400 font-medium">
+                <Clock size={14} />
+                <span>{post.readTime} читання</span>
+              </div>
             </div>
             
-            <h1 className="text-[2.25rem] md:text-[3.5rem] font-black text-[var(--text-primary)] pb-8 mb-12 border-b border-[var(--border-color)] leading-[1.15] tracking-tight">
+            <h1 className="text-[2.25rem] md:text-[3.5rem] font-black text-[var(--text-primary)] mb-8 leading-[1.15] tracking-tight">
               {post.title}
             </h1>
+            <div className="w-16 h-[4px] bg-[#0284c7] rounded-full"></div>
           </header>
+
+          <style dangerouslySetInnerHTML={{__html: `
+            .custom-ordered-list {
+              counter-reset: custom-counter;
+              list-style: none;
+              padding: 0;
+              margin: 2rem 0;
+            }
+            .custom-ordered-list > li {
+              counter-increment: custom-counter;
+              position: relative;
+              padding-left: 3.5rem;
+              padding-bottom: 1.5rem;
+              margin-bottom: 1.5rem;
+              border-bottom: 1px solid var(--border-color);
+              font-size: 1.1rem;
+              color: var(--text-secondary);
+              line-height: 1.8;
+            }
+            .custom-ordered-list > li:last-child {
+              border-bottom: none;
+              padding-bottom: 0;
+              margin-bottom: 0;
+            }
+            .custom-ordered-list > li::before {
+              content: counter(custom-counter) ".";
+              position: absolute;
+              left: 0;
+              top: -0.25rem;
+              font-size: 2rem;
+              font-weight: 700;
+              color: #3b82f6;
+            }
+          `}} />
 
           {/* Article Content */}
           <article className="prose dark:prose-invert prose-lg max-w-none 
             prose-headings:font-bold prose-headings:text-[var(--text-primary)] prose-headings:tracking-tight
-            prose-h2:text-[2rem] prose-h2:font-black prose-h2:mt-16 prose-h2:mb-8 prose-h2:border-b prose-h2:border-[var(--border-color)] prose-h2:pb-4
+            prose-h2:text-[1.8rem] prose-h2:font-black prose-h2:mt-12 prose-h2:mb-6
             prose-h3:text-[1.5rem] prose-h3:mt-10 prose-h3:mb-6
             prose-p:text-[var(--text-secondary)] prose-p:text-[1.1rem] prose-p:leading-[1.85] prose-p:mb-8
             prose-a:text-[var(--accent-blue)] hover:prose-a:text-[var(--accent-cyan)] prose-a:transition-colors prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
             prose-strong:text-[var(--text-primary)] prose-strong:font-extrabold
-            prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6
-            prose-li:text-[var(--text-secondary)] prose-li:text-[1.1rem] prose-li:my-3 prose-li:leading-[1.8] prose-li:marker:text-[var(--accent-cyan)] prose-li:marker:font-bold
-            prose-blockquote:border-l-[4px] prose-blockquote:border-[var(--accent-cyan)] prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-[var(--text-secondary)] prose-blockquote:bg-[var(--bg-glass)] prose-blockquote:py-4 prose-blockquote:pr-6 prose-blockquote:rounded-r-xl"
+            prose-ul:list-disc prose-ul:pl-6
+            prose-blockquote:border-none prose-blockquote:bg-[#f8fafc] dark:prose-blockquote:bg-[rgba(255,255,255,0.03)] prose-blockquote:rounded-2xl prose-blockquote:p-8 prose-blockquote:not-italic prose-blockquote:my-10 prose-blockquote:text-[var(--text-primary)]"
           >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                ol: ({node, ...props}) => <ol className="custom-ordered-list" {...props} />,
+                li: ({node, ...props}) => <li {...props} />
+              }}
+            >
               {post.content}
             </ReactMarkdown>
           </article>
