@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   slugs.forEach((slug) => {
     const realSlug = slug.replace(/\.md$/, '');
     sitemapData.push({
-      url: `${SITE_URL}/blog/${realSlug}`,
+      url: `${SITE_URL}/${realSlug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.6,

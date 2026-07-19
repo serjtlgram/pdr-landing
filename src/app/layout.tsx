@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { ThemeProvider } from './components/SharedUI';
 import './globals.css';
 
 const inter = Inter({
@@ -214,7 +215,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://t.me" />
       </head>
-      <body className={`${inter.variable} antialiased`} suppressHydrationWarning>{children}</body>
+      <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
