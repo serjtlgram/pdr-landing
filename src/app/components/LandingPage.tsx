@@ -318,7 +318,7 @@ function LandingInner({
 
           {/* Desktop nav */}
           <nav aria-label="Головна навігація" className="hidden md:flex" style={{ alignItems: 'center', gap: '0.25rem' }}>
-            {[['#features', 'Переваги'], ['#how', 'Як це'], ['#faq', 'FAQ']].map(([href, label]) => (
+            {[['#features', 'Переваги'], ['#how', 'Як це'], ['#faq', 'FAQ'], ['/blog', 'Блог']].map(([href, label]) => (
               <a key={href} href={href}
                 style={{ display: 'inline-block', padding: '0.4rem 0.875rem', fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none', borderRadius: '0.5rem', transition: 'color 0.2s' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-cyan)')}
@@ -354,7 +354,7 @@ function LandingInner({
         {/* Mobile menu */}
         {menuOpen && (
           <div style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {[['#features', 'Переваги'], ['#how', 'Як це працює'], ['#faq', 'FAQ']].map(([href, label]) => (
+            {[['#features', 'Переваги'], ['#how', 'Як це працює'], ['#faq', 'FAQ'], ['/blog', 'Блог']].map(([href, label]) => (
               <a key={href} href={href} onClick={() => setMenuOpen(false)}
                 style={{ padding: '0.625rem 0.75rem', fontSize: '0.9375rem', fontWeight: 500, color: 'var(--text-primary)', textDecoration: 'none', borderRadius: '0.5rem', background: 'var(--bg-glass)' }}>
                 {label}
@@ -404,12 +404,12 @@ function LandingInner({
                     color: 'var(--text-primary)',
                   }}
                 >
-                  Офіційні тести ПДР України{' '}
-                  <span className="gradient-text-animated">2026 онлайн</span>
+                  Офіційні тести ПДР 2026 |{' '}
+                  <span className="gradient-text-animated">Телеграм Бот</span>
                 </h1>
 
                 <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '2.5rem', maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto' }}>
-                  Готуйтеся до іспиту ПДР 2026 онлайн! 100% відповідність офіційній базі ГСЦ МВС. Мобільний додаток у Telegram, ШІ-аналітика помилок та симулятор реального іспиту.
+                  Готуйтеся до іспиту ПДР 2026 онлайн! 100% відповідність офіційній базі ГСЦ МВС. Найкращий ПДР Міні Апп у Telegram, ШІ-аналітика помилок та симулятор реального іспиту.
                 </p>
 
                 {/* CTA buttons */}
