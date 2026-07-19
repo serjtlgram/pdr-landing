@@ -88,16 +88,18 @@ export default async function BlogPostPage({
               {/* Decorative background glow */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-gradient-to-r from-[var(--accent-cyan)] to-[#8b5cf6] opacity-[0.08] blur-[80px] pointer-events-none"></div>
               
-              <div className="relative z-10">
-                <h3 className="text-[2rem] md:text-[2.75rem] font-black text-[var(--text-primary)] mb-4 tracking-tight leading-[1.1]">Твої права вже чекають</h3>
-                <p className="text-[var(--text-secondary)] mb-8 max-w-[28rem] mx-auto text-[1.1rem] leading-[1.6]">
+              <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                <h3 className="text-[2rem] md:text-[2.75rem] font-black text-[var(--text-primary)] tracking-tight leading-[1.1]" style={{ marginBottom: '1.5rem' }}>
+                  Твої права вже чекають
+                </h3>
+                <p className="text-[var(--text-secondary)] max-w-[28rem] text-[1.1rem] leading-[1.6]" style={{ marginBottom: '2.5rem' }}>
                   Приєднуйся до 1 400+ українців, які вже здали іспит на 20/20. Перший крок — безкоштовно.
                 </p>
-                <div className="flex justify-center">
+                <div className="flex justify-center" style={{ marginBottom: '1.25rem' }}>
                   <TelegramButton label="Відкрити бота в Telegram" size="lg" id="cta-blog-post" />
                 </div>
-                <div className="flex items-center justify-center gap-1.5 mt-5 text-[0.8rem] text-[var(--text-secondary)] font-medium opacity-70">
-                  <Clock size={13} />
+                <div className="flex items-center justify-center gap-1.5 text-[0.85rem] text-[var(--text-secondary)] font-medium opacity-75">
+                  <Clock size={14} />
                   <span>Старт за 10 секунд · Без реєстрації</span>
                 </div>
               </div>
