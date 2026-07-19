@@ -40,63 +40,71 @@ export default async function BlogPostPage({
       <BackgroundEffects />
       <SiteHeader />
       
-      <main className="container-xl max-w-3xl" style={{ paddingTop: '10rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
-        <Link href="/blog" className="inline-flex items-center gap-2 text-theme-secondary hover:text-[var(--accent-cyan)] transition-colors mb-8 font-medium">
-          <ChevronLeft size={20} />
-          <span>До списку статей</span>
-        </Link>
-        
-        <article className="glass-card p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-[var(--border-color)]">
-          <header className="mb-10 border-b border-[var(--border-color)] pb-8">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="inline-block px-3 py-1 rounded-full bg-[rgba(6,182,212,0.1)] border border-[rgba(6,182,212,0.2)] text-[var(--accent-cyan)] text-xs font-extrabold uppercase tracking-widest">
+      <main className="container-xl" style={{ paddingTop: '8rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
+        <div className="max-w-3xl mx-auto">
+          {/* Back Button */}
+          <Link href="/blog" className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] transition-colors mb-10 font-semibold text-sm">
+            <ChevronLeft size={18} />
+            <span>До списку статей</span>
+          </Link>
+          
+          {/* Article Header */}
+          <header className="mb-14">
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              <span className="inline-block px-3 py-1 rounded-[6px] bg-[rgba(6,182,212,0.12)] text-[var(--accent-cyan)] text-[11px] font-extrabold uppercase tracking-widest">
                 {post.category}
               </span>
-              <span className="text-xs text-[var(--text-secondary)] opacity-60">•</span>
-              <span className="text-xs text-[var(--text-secondary)] font-semibold">{post.date}</span>
-              <span className="text-xs text-[var(--text-secondary)] opacity-60">•</span>
-              <span className="text-xs text-[var(--text-secondary)] font-semibold">{post.readTime}</span>
+              <span className="text-[var(--text-secondary)] opacity-40">•</span>
+              <span className="text-[13px] text-[var(--text-secondary)] font-semibold">{post.date}</span>
+              <span className="text-[var(--text-secondary)] opacity-40">•</span>
+              <span className="text-[13px] text-[var(--text-secondary)] font-semibold">{post.readTime} читання</span>
             </div>
             
-            <h1 className="text-3xl md:text-5xl font-black text-theme-primary mb-6 leading-[1.15] tracking-tight">
+            <h1 className="text-[2.25rem] md:text-[3.5rem] font-black text-[var(--text-primary)] mb-8 leading-[1.15] tracking-tight">
               {post.title}
             </h1>
             
-            <div className="flex items-center gap-3 pt-2">
-              <img src={post.authorAvatar} alt={post.author} className="w-8 h-8 rounded-full border border-[var(--accent-cyan)]/40 object-cover" />
-              <span className="text-sm font-bold text-theme-primary">{post.author}</span>
+            <div className="flex items-center gap-3 pb-8 border-b border-[var(--border-color)]">
+              <img src={post.authorAvatar} alt={post.author} className="w-10 h-10 rounded-full border border-[var(--border-color)] object-cover shadow-sm" />
+              <span className="text-[0.95rem] font-bold text-[var(--text-primary)]">{post.author}</span>
             </div>
           </header>
 
-          <div className="prose prose-invert max-w-none 
-            prose-headings:text-theme-primary prose-headings:font-bold prose-headings:tracking-tight
-            prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
-            prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-            prose-a:text-accent-blue hover:prose-a:text-accent-cyan prose-a:transition-colors prose-a:font-semibold
-            prose-strong:text-theme-primary prose-strong:font-bold
+          {/* Article Content */}
+          <article className="prose dark:prose-invert prose-lg max-w-none 
+            prose-headings:font-bold prose-headings:text-[var(--text-primary)] prose-headings:tracking-tight
+            prose-h2:text-[1.8rem] prose-h2:mt-12 prose-h2:mb-6
+            prose-h3:text-[1.4rem] prose-h3:mt-8 prose-h3:mb-4
+            prose-p:text-[var(--text-secondary)] prose-p:leading-[1.8] prose-p:mb-6
+            prose-a:text-[var(--accent-blue)] hover:prose-a:text-[var(--accent-cyan)] prose-a:transition-colors prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+            prose-strong:text-[var(--text-primary)] prose-strong:font-bold
             prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6
-            prose-li:text-theme-secondary prose-li:my-2 prose-li:leading-relaxed prose-li:text-lg
-            prose-p:text-theme-secondary prose-p:leading-relaxed prose-p:text-lg prose-p:my-6
-            prose-blockquote:border-l-4 prose-blockquote:border-accent-cyan prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-theme-secondary prose-blockquote:bg-[var(--bg-secondary)] prose-blockquote:py-2 prose-blockquote:rounded-r-lg"
+            prose-li:text-[var(--text-secondary)] prose-li:my-2 prose-li:leading-[1.8]
+            prose-blockquote:border-l-[4px] prose-blockquote:border-[var(--accent-cyan)] prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-[var(--text-secondary)] prose-blockquote:bg-[var(--bg-glass)] prose-blockquote:py-3 prose-blockquote:pr-4 prose-blockquote:rounded-r-xl"
           >
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {post.content}
             </ReactMarkdown>
-          </div>
+          </article>
 
-          <div className="mt-16 pt-10 border-t border-[var(--border-color)]">
-            <div className="bg-gradient-to-br from-[rgba(6,182,212,0.15)] to-[rgba(59,130,246,0.15)] p-10 rounded-3xl text-center border border-[rgba(6,182,212,0.3)] shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden">
-              <div className="absolute inset-0 bg-[url('/img/noise.png')] opacity-20 mix-blend-overlay"></div>
+          {/* Bottom CTA Card */}
+          <div className="mt-20">
+            <div className="glass-card rounded-[2rem] p-8 md:p-12 text-center relative overflow-hidden" style={{ border: '1px solid var(--border-color)', background: 'var(--bg-card)' }}>
+              {/* Decorative background glow */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-md h-32 bg-[var(--accent-cyan)] opacity-10 blur-[60px] pointer-events-none"></div>
+              
               <div className="relative z-10">
-                <h3 className="text-3xl font-extrabold text-theme-primary mb-4">Готуєшся до іспиту ПДР?</h3>
-                <p className="text-theme-secondary mb-8 max-w-lg mx-auto text-lg leading-relaxed">
+                <h3 className="text-2xl md:text-[2rem] font-extrabold text-[var(--text-primary)] mb-4 tracking-tight">Готуєшся до іспиту ПДР?</h3>
+                <p className="text-[var(--text-secondary)] mb-8 max-w-[28rem] mx-auto text-[1.05rem] leading-[1.6]">
                   Запускай наш офіційний Telegram-бот та проходь тести ПДР 2026 року з реальними питаннями від ГСЦ МВС. Безкоштовно та без реклами.
                 </p>
-                <TelegramButton label="Запустити тести у Telegram" size="lg" id="cta-blog-post" />
+                <div className="flex justify-center">
+                  <TelegramButton label="Запустити тести у Telegram" size="lg" id="cta-blog-post" />
+                </div>
               </div>
             </div>
           </div>
-        </article>
+        </div>
       </main>
     </div>
   );
