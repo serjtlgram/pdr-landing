@@ -32,38 +32,41 @@ export default function BlogIndex() {
           {posts.map((post, idx) => (
             <article 
               key={post.slug} 
-              className="glass-card rounded-[2rem] p-8 md:p-10 border border-[var(--border-color)] hover:border-[var(--accent-cyan)] transition-all duration-300 group hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(6,182,212,0.12)] flex flex-col relative"
+              className="group relative flex flex-col items-start justify-between rounded-[2.5rem] bg-[var(--bg-card)] p-8 md:p-10 shadow-sm ring-1 ring-[var(--border-color)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-[var(--accent-cyan)]"
             >
-              {/* Premium Top Metadata Row */}
-              <div className="flex items-center gap-3 mb-5">
-                <span className="text-[var(--accent-cyan)] text-[11px] font-extrabold uppercase tracking-widest">{post.category}</span>
-                <span className="w-1 h-1 rounded-full bg-[var(--text-secondary)] opacity-40"></span>
-                <span className="text-xs font-semibold text-[var(--text-secondary)] opacity-75">{post.date}</span>
-                <span className="w-1 h-1 rounded-full bg-[var(--text-secondary)] opacity-40"></span>
-                <span className="flex items-center gap-1 text-xs font-semibold text-[var(--text-secondary)] opacity-75">
-                  <Clock size={12} /> {post.readTime}
-                </span>
+              <div className="flex-1 w-full relative z-10 pointer-events-none">
+                {/* Meta Row */}
+                <div className="flex items-center gap-x-4 text-[11px] mb-5">
+                  <span className="font-extrabold text-[var(--accent-cyan)] uppercase tracking-[0.15em]">
+                    {post.category}
+                  </span>
+                  <span className="text-[var(--text-secondary)] font-semibold opacity-70">
+                    {post.date}
+                  </span>
+                </div>
+
+                {/* Title */}
+                <h2 className="text-[1.35rem] md:text-2xl font-bold text-[var(--text-primary)] mb-4 leading-[1.3] tracking-tight group-hover:text-[var(--accent-cyan)] transition-colors pointer-events-auto">
+                  <Link href={`/${post.slug}`} className="focus:outline-none">
+                    <span className="absolute inset-0 z-0" aria-hidden="true" />
+                    {post.title}
+                  </Link>
+                </h2>
+
+                {/* Excerpt */}
+                <p className="text-[0.95rem] md:text-base leading-[1.7] text-[var(--text-secondary)] line-clamp-3 opacity-90 font-medium">
+                  {post.description}
+                </p>
               </div>
 
-              {/* Title */}
-              <h2 className="text-2xl font-bold text-theme-primary mb-4 leading-snug group-hover:text-[var(--accent-cyan)] transition-colors">
-                <Link href={`/${post.slug}`} className="before:absolute before:inset-0 focus:outline-none">
-                  {post.title}
-                </Link>
-              </h2>
-
-              {/* Excerpt */}
-              <p className="text-theme-secondary text-base leading-relaxed mb-10 flex-grow opacity-90">
-                {post.description}
-              </p>
-
-              {/* Elegant Action Row */}
-              <div className="mt-auto pt-6 border-t border-[var(--border-color)] flex items-center justify-between">
-                <span className="text-sm font-bold text-[var(--text-primary)] opacity-80 group-hover:text-[var(--accent-cyan)] transition-colors">
-                  Читати статтю
-                </span>
-                <div className="w-9 h-9 rounded-full bg-[var(--badge-bg)] border border-[var(--border-color)] flex items-center justify-center group-hover:border-[var(--accent-cyan)] group-hover:bg-[rgba(6,182,212,0.1)] transition-all duration-300">
-                  <ChevronRight size={16} className="text-[var(--text-secondary)] group-hover:text-[var(--accent-cyan)] group-hover:translate-x-0.5 transition-all" />
+              {/* Bottom Action */}
+              <div className="mt-8 flex items-center justify-between w-full relative z-10 pointer-events-none">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[var(--text-secondary)] opacity-70">
+                  <Clock size={14} />
+                  {post.readTime} читання
+                </div>
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(6,182,212,0.08)] text-[var(--accent-cyan)] transition-all duration-300 group-hover:bg-[rgba(6,182,212,0.15)] group-hover:scale-110">
+                  <ChevronRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5" />
                 </div>
               </div>
             </article>
