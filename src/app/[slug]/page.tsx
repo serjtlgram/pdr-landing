@@ -40,21 +40,32 @@ export default async function BlogPostPage({
       <BackgroundEffects />
       <SiteHeader />
       
-      <main className="container-xl max-w-3xl pt-32 pb-20 relative z-10">
-        <Link href="/blog" className="inline-flex items-center gap-2 text-theme-secondary hover:text-accent-cyan transition-colors mb-10 font-medium">
+      <main className="container-xl max-w-3xl pt-40 md:pt-48 pb-24 relative z-10">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-theme-secondary hover:text-[var(--accent-cyan)] transition-colors mb-8 font-medium">
           <ChevronLeft size={20} />
           <span>До списку статей</span>
         </Link>
         
-        <article className="glass-card p-8 md:p-12 rounded-[2rem] shadow-2xl border border-[var(--border-color)]">
-          <header className="mb-10 border-b border-theme pb-8 text-center md:text-left">
-            <p className="text-accent-cyan font-bold tracking-wider uppercase mb-4 text-sm">{post.date}</p>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-theme-primary mb-6 leading-[1.15] tracking-tight">
+        <article className="glass-card p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-[var(--border-color)]">
+          <header className="mb-10 border-b border-[var(--border-color)] pb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="inline-block px-3 py-1 rounded-full bg-[rgba(6,182,212,0.1)] border border-[rgba(6,182,212,0.2)] text-[var(--accent-cyan)] text-xs font-extrabold uppercase tracking-widest">
+                {post.category}
+              </span>
+              <span className="text-xs text-[var(--text-secondary)] opacity-60">•</span>
+              <span className="text-xs text-[var(--text-secondary)] font-semibold">{post.date}</span>
+              <span className="text-xs text-[var(--text-secondary)] opacity-60">•</span>
+              <span className="text-xs text-[var(--text-secondary)] font-semibold">{post.readTime}</span>
+            </div>
+            
+            <h1 className="text-3xl md:text-5xl font-black text-theme-primary mb-6 leading-[1.15] tracking-tight">
               {post.title}
             </h1>
-            <p className="text-theme-secondary text-xl leading-relaxed max-w-2xl font-medium">
-              {post.description}
-            </p>
+            
+            <div className="flex items-center gap-3 pt-2">
+              <img src={post.authorAvatar} alt={post.author} className="w-8 h-8 rounded-full border border-[var(--accent-cyan)]/40 object-cover" />
+              <span className="text-sm font-bold text-theme-primary">{post.author}</span>
+            </div>
           </header>
 
           <div className="prose prose-invert max-w-none 

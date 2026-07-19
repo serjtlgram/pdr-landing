@@ -9,6 +9,11 @@ export type BlogPost = {
   title: string;
   date: string;
   description: string;
+  category?: string;
+  image?: string;
+  readTime?: string;
+  author?: string;
+  authorAvatar?: string;
   content: string;
 };
 
@@ -33,6 +38,11 @@ export function getPostBySlug(slug: string): BlogPost {
     title: data.title || 'Без назви',
     date: data.date || '2026-01-01',
     description: data.description || '',
+    category: data.category || 'ПДР 2026',
+    image: data.image || '/img/blog-default.jpg',
+    readTime: data.readTime || '5 хв',
+    author: data.author || 'Команда ПДР',
+    authorAvatar: data.authorAvatar || 'https://i.pravatar.cc/100?img=12',
     content,
   };
 }
