@@ -41,7 +41,7 @@ export default async function BlogPostPage({
       <SiteHeader />
       
       <main className="container-xl" style={{ paddingTop: '8rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
-        <div className="max-w-3xl mx-auto">
+        <div style={{ maxWidth: '48rem', margin: '0 auto' }}>
           {/* Back Button */}
           <Link href="/blog" className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] transition-colors mb-10 font-semibold text-sm">
             <ChevronLeft size={18} />
