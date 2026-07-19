@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getAllPosts } from '@/lib/blog';
 import { SiteHeader, BackgroundEffects } from '@/app/components/SharedUI';
-import { Clock, BookOpen, ChevronRight, User } from 'lucide-react';
+import { Clock, BookOpen, ChevronRight, User, Eye } from 'lucide-react';
 
 export default function BlogIndex() {
   const posts = getAllPosts();
@@ -32,21 +32,11 @@ export default function BlogIndex() {
           {posts.map((post, idx) => (
             <article 
               key={post.slug} 
-              className="group relative flex flex-col items-start justify-between rounded-[2.5rem] bg-[var(--bg-card)] p-8 md:p-10 shadow-sm ring-1 ring-[var(--border-color)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-[var(--accent-cyan)]"
+              className="group relative flex flex-col items-start justify-between rounded-[2rem] bg-[var(--bg-card)] p-8 md:p-10 border border-[var(--border-color)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-[var(--accent-cyan)]"
             >
               <div className="flex-1 w-full relative z-10 pointer-events-none">
-                {/* Meta Row */}
-                <div className="flex items-center gap-x-4 text-[11px] mb-5">
-                  <span className="font-extrabold text-[var(--accent-cyan)] uppercase tracking-[0.15em]">
-                    {post.category}
-                  </span>
-                  <span className="text-[var(--text-secondary)] font-semibold opacity-70">
-                    {post.date}
-                  </span>
-                </div>
-
                 {/* Title */}
-                <h2 className="text-[1.35rem] md:text-2xl font-bold text-[var(--text-primary)] mb-4 leading-[1.3] tracking-tight group-hover:text-[var(--accent-cyan)] transition-colors pointer-events-auto">
+                <h2 className="text-[22px] md:text-[26px] font-bold text-[var(--text-primary)] mb-6 leading-[1.3] group-hover:text-[var(--accent-cyan)] transition-colors pointer-events-auto">
                   <Link href={`/${post.slug}`} className="focus:outline-none">
                     <span className="absolute inset-0 z-0" aria-hidden="true" />
                     {post.title}
@@ -54,20 +44,28 @@ export default function BlogIndex() {
                 </h2>
 
                 {/* Excerpt */}
-                <p className="text-[0.95rem] md:text-base leading-[1.7] text-[var(--text-secondary)] line-clamp-3 opacity-90 font-medium">
+                <p className="text-[16px] md:text-[17px] leading-[1.7] text-[var(--text-secondary)] line-clamp-4 opacity-90 mb-8">
                   {post.description}
                 </p>
               </div>
 
-              {/* Bottom Action */}
-              <div className="mt-8 flex items-center justify-between w-full relative z-10 pointer-events-none">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[var(--text-secondary)] opacity-70">
-                  <Clock size={14} />
-                  {post.readTime} читання
+              {/* Bottom Action / Meta Row */}
+              <div className="mt-auto pt-2 flex flex-wrap items-center gap-4 md:gap-5 w-full relative z-10 pointer-events-none">
+                {/* Category Pill */}
+                <span className="inline-block px-3 py-1 rounded-[4px] bg-[#60a5fa] text-white text-[11px] font-bold uppercase tracking-wider">
+                  {post.category}
+                </span>
+
+                {/* Read Time / Eye */}
+                <div className="flex items-center gap-1.5 text-[13px] font-semibold text-[var(--text-secondary)] opacity-70">
+                  <Clock size={16} />
+                  <span>{post.readTime}</span>
                 </div>
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(6,182,212,0.08)] text-[var(--accent-cyan)] transition-all duration-300 group-hover:bg-[rgba(6,182,212,0.15)] group-hover:scale-110">
-                  <ChevronRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-                </div>
+
+                {/* Date */}
+                <span className="text-[13px] font-semibold text-[var(--text-secondary)] opacity-70 uppercase tracking-wide">
+                  {post.date}
+                </span>
               </div>
             </article>
           ))}
