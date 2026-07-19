@@ -48,15 +48,15 @@ export default function BlogIndex() {
               </div>
 
               {/* Title */}
-              <h2 className="group-hover:text-[var(--accent-cyan)] transition-colors duration-300" style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem', lineHeight: 1.3, position: 'relative', zIndex: 20 }}>
+              <h2 className="group-hover:text-[var(--accent-cyan)] transition-colors duration-300" style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem', lineHeight: 1.3 }}>
                 <Link href={`/${post.slug}`} className="focus:outline-none" style={{ color: 'inherit', textDecoration: 'none' }}>
-                  <span className="absolute inset-0" aria-hidden="true" />
+                  <span className="absolute inset-0 z-10" aria-hidden="true" />
                   {post.title}
                 </Link>
               </h2>
 
               {/* Excerpt */}
-              <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, flexGrow: 1, marginBottom: '2rem', position: 'relative', zIndex: 10, pointerEvents: 'none' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, flexGrow: 1, marginBottom: '2rem', position: 'relative' }}>
                 {post.description}
               </p>
 
