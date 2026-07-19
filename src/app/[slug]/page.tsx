@@ -3,7 +3,7 @@ import { getPostBySlug, getPostSlugs } from '@/lib/blog';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Clock } from 'lucide-react';
 import { Metadata } from 'next';
 import { SiteHeader, BackgroundEffects, TelegramButton } from '@/app/components/SharedUI';
 
@@ -84,17 +84,21 @@ export default async function BlogPostPage({
 
           {/* Bottom CTA Card */}
           <div className="mt-32 mb-10">
-            <div className="glass-card rounded-[2.5rem] relative overflow-hidden shadow-2xl" style={{ border: '1px solid var(--border-color)', background: 'var(--bg-card)', padding: '4rem 2.5rem', textAlign: 'center' }}>
+            <div className="glass-card rounded-[2.5rem] relative overflow-hidden shadow-2xl" style={{ border: '1px solid var(--border-color)', background: 'var(--bg-card)', padding: '4.5rem 2.5rem', textAlign: 'center' }}>
               {/* Decorative background glow */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-40 bg-[var(--accent-cyan)] opacity-[0.15] blur-[80px] pointer-events-none"></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-gradient-to-r from-[var(--accent-cyan)] to-[#8b5cf6] opacity-[0.08] blur-[80px] pointer-events-none"></div>
               
               <div className="relative z-10">
-                <h3 className="text-2xl md:text-[2rem] font-extrabold text-[var(--text-primary)] mb-4 tracking-tight">Готуєшся до іспиту ПДР?</h3>
-                <p className="text-[var(--text-secondary)] mb-8 max-w-[28rem] mx-auto text-[1.05rem] leading-[1.6]">
-                  Запускай наш офіційний Telegram-бот та проходь тести ПДР 2026 року з реальними питаннями від ГСЦ МВС. Безкоштовно та без реклами.
+                <h3 className="text-[2rem] md:text-[2.75rem] font-black text-[var(--text-primary)] mb-4 tracking-tight leading-[1.1]">Твої права вже чекають</h3>
+                <p className="text-[var(--text-secondary)] mb-8 max-w-[28rem] mx-auto text-[1.1rem] leading-[1.6]">
+                  Приєднуйся до 1 400+ українців, які вже здали іспит на 20/20. Перший крок — безкоштовно.
                 </p>
                 <div className="flex justify-center">
-                  <TelegramButton label="Запустити тести у Telegram" size="lg" id="cta-blog-post" />
+                  <TelegramButton label="Відкрити бота в Telegram" size="lg" id="cta-blog-post" />
+                </div>
+                <div className="flex items-center justify-center gap-1.5 mt-5 text-[0.8rem] text-[var(--text-secondary)] font-medium opacity-70">
+                  <Clock size={13} />
+                  <span>Старт за 10 секунд · Без реєстрації</span>
                 </div>
               </div>
             </div>
