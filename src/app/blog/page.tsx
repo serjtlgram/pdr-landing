@@ -32,41 +32,39 @@ export default function BlogIndex() {
           {posts.map((post, idx) => (
             <article 
               key={post.slug} 
-              className="glass-card rounded-[2rem] p-8 md:p-10 border border-[var(--border-color)] hover:border-[var(--accent-cyan)] transition-all duration-500 group hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(6,182,212,0.18)] flex flex-col relative"
+              className="glass-card rounded-[2rem] p-8 md:p-10 border border-[var(--border-color)] hover:border-[var(--accent-cyan)] transition-all duration-300 group hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(6,182,212,0.12)] flex flex-col relative"
             >
-              {/* Category Pill */}
-              <div className="mb-6">
-                <span className="inline-block px-3 py-1.5 rounded-full bg-[rgba(6,182,212,0.1)] border border-[rgba(6,182,212,0.2)] text-[var(--accent-cyan)] text-[11px] font-extrabold uppercase tracking-widest">
-                  {post.category}
-                </span>
-              </div>
-
-              {/* Meta Row: Date & Read Time */}
-              <div className="flex items-center gap-3 text-xs font-semibold text-[var(--text-secondary)] opacity-75 mb-3">
-                <span>{post.date}</span>
-                <span>•</span>
-                <span className="flex items-center gap-1">
+              {/* Premium Top Metadata Row */}
+              <div className="flex items-center gap-3 mb-5">
+                <span className="text-[var(--accent-cyan)] text-[11px] font-extrabold uppercase tracking-widest">{post.category}</span>
+                <span className="w-1 h-1 rounded-full bg-[var(--text-secondary)] opacity-40"></span>
+                <span className="text-xs font-semibold text-[var(--text-secondary)] opacity-75">{post.date}</span>
+                <span className="w-1 h-1 rounded-full bg-[var(--text-secondary)] opacity-40"></span>
+                <span className="flex items-center gap-1 text-xs font-semibold text-[var(--text-secondary)] opacity-75">
                   <Clock size={12} /> {post.readTime}
                 </span>
               </div>
 
               {/* Title */}
-              <h2 className="text-2xl font-extrabold text-theme-primary mb-4 leading-snug group-hover:text-[var(--accent-cyan)] transition-colors">
+              <h2 className="text-2xl font-bold text-theme-primary mb-4 leading-snug group-hover:text-[var(--accent-cyan)] transition-colors">
                 <Link href={`/${post.slug}`} className="before:absolute before:inset-0 focus:outline-none">
                   {post.title}
                 </Link>
               </h2>
 
               {/* Excerpt */}
-              <p className="text-theme-secondary text-base leading-relaxed mb-8 flex-grow">
+              <p className="text-theme-secondary text-base leading-relaxed mb-10 flex-grow opacity-90">
                 {post.description}
               </p>
 
-              {/* Action Row */}
-              <div className="mt-auto flex justify-end">
-                <span className="inline-flex items-center gap-1 text-xs font-extrabold text-[var(--accent-cyan)] uppercase tracking-wider group-hover:text-[var(--accent-blue)] transition-colors">
-                  Читати <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              {/* Elegant Action Row */}
+              <div className="mt-auto pt-6 border-t border-[var(--border-color)] flex items-center justify-between">
+                <span className="text-sm font-bold text-[var(--text-primary)] opacity-80 group-hover:text-[var(--accent-cyan)] transition-colors">
+                  Читати статтю
                 </span>
+                <div className="w-9 h-9 rounded-full bg-[var(--badge-bg)] border border-[var(--border-color)] flex items-center justify-center group-hover:border-[var(--accent-cyan)] group-hover:bg-[rgba(6,182,212,0.1)] transition-all duration-300">
+                  <ChevronRight size={16} className="text-[var(--text-secondary)] group-hover:text-[var(--accent-cyan)] group-hover:translate-x-0.5 transition-all" />
+                </div>
               </div>
             </article>
           ))}
