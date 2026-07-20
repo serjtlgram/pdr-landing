@@ -48,7 +48,7 @@ export default async function BlogPostPage({
         
         {/* Back Button */}
         <div className="mb-8">
-          <Link href="/blog" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(6,182,212,0.12)] hover:border-[var(--accent-cyan)] text-[#0284c7] dark:text-[#38bdf8] transition-all duration-300 font-semibold text-sm">
+          <Link href="/blog" className="inline-flex items-center gap-2 px-7 py-2.5 rounded-full glass-card hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(6,182,212,0.12)] hover:border-[var(--accent-cyan)] text-[#0284c7] dark:text-[#38bdf8] transition-all duration-300 font-semibold text-sm whitespace-nowrap">
             <ChevronLeft size={18} strokeWidth={2.5} />
             <span>До списку статей</span>
           </Link>
