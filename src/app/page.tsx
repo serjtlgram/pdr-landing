@@ -70,7 +70,17 @@ export default function Home() {
             
             {/* View All Button */}
             <div style={{ textAlign: 'center', marginTop: '3.5rem' }}>
-              <Link href="/blog" className="inline-flex items-center gap-2 px-8 py-3 rounded-full text-[var(--accent-cyan)] font-bold text-sm border border-[var(--accent-cyan)] hover:bg-[var(--accent-cyan)] hover:text-white transition-colors duration-300">
+              <Link href="/blog" 
+                className="btn-shimmer text-white font-bold rounded-2xl transition-all duration-300 animate-glow-ring"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  whiteSpace: 'nowrap',
+                  padding: '1.1rem 2.25rem',
+                  fontSize: '1.125rem',
+                }}
+              >
                 Перейти до Бази Знань
               </Link>
             </div>
