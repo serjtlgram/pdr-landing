@@ -194,9 +194,9 @@ export function BackgroundEffects() {
     <>
       <div className="noise" />
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }} aria-hidden="true">
-        <div className="blob animate-blob" style={{ width: '45vw', height: '45vw', top: '-10%', left: '-10%', background: 'var(--blob-1)' }} />
-        <div className="blob animate-blob-delay" style={{ width: '40vw', height: '40vw', bottom: '-10%', right: '-10%', background: 'var(--blob-2)' }} />
-        <div className="blob" style={{ width: '30vw', height: '30vw', top: '40%', left: '50%', transform: 'translateX(-50%)', background: 'var(--blob-3)', filter: 'blur(100px)' }} />
+        <div className="blob animate-blob" style={{ width: '45vw', height: '45vw', top: '-10%', left: '-10%', background: 'radial-gradient(circle, var(--blob-1) 0%, transparent 70%)' }} />
+        <div className="blob animate-blob-delay" style={{ width: '40vw', height: '40vw', bottom: '-10%', right: '-10%', background: 'radial-gradient(circle, var(--blob-2) 0%, transparent 70%)' }} />
+        <div className="blob" style={{ width: '30vw', height: '30vw', top: '40%', left: '50%', transform: 'translateX(-50%)', background: 'radial-gradient(circle, var(--blob-3) 0%, transparent 70%)' }} />
       </div>
     </>
   );
