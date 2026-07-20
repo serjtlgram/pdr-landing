@@ -213,7 +213,7 @@ export function SiteFooter() {
           <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>ПДР України Bot</span>
         </div>
         <nav style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-          {[['Договір оферти', '#'], ['Політика конфіденційності', '#'], ['Контакти', 'https://t.me/IvanMasepa']].map(([label, href]) => (
+          {[['Договір оферти', '/offer'], ['Політика конфіденційності', '/privacy'], ['Контакти', 'https://t.me/IvanMasepa']].map(([label, href]) => (
             <a key={label} href={href} target={href.startsWith('http') ? '_blank' : '_self'} rel={href.startsWith('http') ? 'noopener noreferrer' : ''} style={{ fontSize: '0.875rem', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s ease' }}
               onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-cyan)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
