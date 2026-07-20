@@ -201,3 +201,28 @@ export function BackgroundEffects() {
     </>
   );
 }
+
+/* ─── FOOTER ─────────────────────────────────────────────────────────── */
+export function SiteFooter() {
+  return (
+    <footer style={{ position: 'relative', zIndex: 10, borderTop: '1px solid var(--border-color)', background: 'var(--bg-secondary)', paddingTop: '2.5rem', paddingBottom: '2.5rem' }}>
+      <div className="container-xl" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+          <div style={{ width: '1.875rem', height: '1.875rem', borderRadius: '0.5rem', overflow: 'hidden' }}>
+            <Image src="/img/logo.png" alt="ПДР" width={30} height={30} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>ПДР України Bot</span>
+        </div>
+        <nav style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {[['Договір оферти', '#'], ['Політика конфіденційності', '#'], ['Контакти', '#']].map(([label, href]) => (
+            <a key={label} href={href} style={{ fontSize: '0.875rem', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s ease' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-cyan)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
+            >{label}</a>
+          ))}
+        </nav>
+        <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>© 2026 ПДР України. Всі права захищені.</p>
+      </div>
+    </footer>
+  );
+}

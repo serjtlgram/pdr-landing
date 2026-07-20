@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-import { ThemeProvider } from './components/SharedUI';
+import { ThemeProvider, SiteHeader, SiteFooter, BackgroundEffects } from './components/SharedUI';
 import './globals.css';
 
 const inter = Inter({
@@ -217,7 +217,14 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
         <ThemeProvider>
-          {children}
+          <div className="min-h-screen bg-theme-primary" style={{ position: 'relative' }}>
+            <BackgroundEffects />
+            <SiteHeader />
+            <main style={{ paddingTop: '5rem' }}>
+              {children}
+            </main>
+            <SiteFooter />
+          </div>
         </ThemeProvider>
       </body>
     </html>
