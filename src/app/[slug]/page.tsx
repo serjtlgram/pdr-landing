@@ -140,7 +140,7 @@ export default async function BlogPostPage({
             </article>
 
             {/* Bottom CTA Card */}
-            <div className="mt-16 mb-10">
+            <div className="mt-28 mb-10">
               <div className="glass-card rounded-[2.5rem] relative overflow-hidden shadow-2xl" style={{ border: '1px solid var(--border-color)', background: 'var(--bg-card)', padding: '2.25rem 1.25rem', textAlign: 'center' }}>
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-gradient-to-r from-[var(--accent-cyan)] to-[#8b5cf6] opacity-[0.08] blur-[80px] pointer-events-none"></div>
                 <div className="relative z-10 flex flex-col items-center justify-center text-center">
