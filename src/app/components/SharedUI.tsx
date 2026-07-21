@@ -166,7 +166,7 @@ export function SiteHeader() {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Меню"
             style={{ position: 'relative', zIndex: 2, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '2.5rem', height: '2.5rem', borderRadius: '0.625rem', border: '1px solid var(--border-color)', background: 'var(--bg-glass)', color: 'var(--text-primary)', cursor: 'pointer' }}
-            className="sm:hidden"
+            className="md:hidden"
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -174,14 +174,19 @@ export function SiteHeader() {
       </div>
 
       {menuOpen && (
-        <div style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div className="md:hidden absolute right-4 top-[4.5rem] w-[280px]" style={{ background: 'var(--bg-card)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid var(--border-color)', borderRadius: '1rem', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', boxShadow: 'var(--shadow-card)' }}>
           {navLinks.map(([href, label]) => (
             <Link key={href} href={href} onClick={() => setMenuOpen(false)}
-              style={{ padding: '0.625rem 0.75rem', fontSize: '0.9375rem', fontWeight: 500, color: 'var(--text-primary)', textDecoration: 'none', borderRadius: '0.5rem', background: 'var(--bg-glass)' }}>
+              style={{ padding: '0.625rem 1rem', fontSize: '0.9375rem', fontWeight: 500, color: 'var(--text-primary)', textDecoration: 'none', borderRadius: '0.5rem', background: 'var(--bg-glass)', transition: 'color 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-cyan)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-primary)')}
+            >
               {label}
             </Link>
           ))}
-          <TelegramButton label="Відкрити в Telegram" size="sm" id="cta-mobile-menu" className="mt-2 w-full justify-center" />
+          <div style={{ marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid var(--border-color)' }}>
+            <TelegramButton label="Відкрити в Telegram" size="sm" id="cta-mobile-menu" className="w-full justify-center" />
+          </div>
         </div>
       )}
     </header>
