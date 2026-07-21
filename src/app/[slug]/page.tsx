@@ -181,7 +181,7 @@ export default async function BlogPostPage({
             ))}
 
             {/* App promo card */}
-            <div className="glass-card mt-2" style={{ padding: '1.75rem 1.5rem', borderRadius: '1rem', background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(59, 130, 246, 0.05))', border: '1px solid var(--border-hover)' }}>
+            <div className="glass-card mt-2 sticky top-28" style={{ padding: '1.75rem 1.5rem', borderRadius: '1rem', background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(59, 130, 246, 0.05))', border: '1px solid var(--border-hover)', zIndex: 20 }}>
               <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, var(--accent-cyan), var(--accent-blue))' }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M21.928 11.607c-.202-.488-.635-.605-.928-.633V8c0-1.103-.897-2-2-2h-6V4.61c.305-.274.5-.668.5-1.11a1.5 1.5 0 0 0-3 0c0 .442.195.836.5 1.11V6H5c-1.103 0-2 .897-2 2v2.997l-.082.006A1 1 0 0 0 2 12v2a1 1 0 0 0 1 1h.082a1 1 0 0 0 .918-.73h16a1 1 0 0 0 .918.73H21a1 1 0 0 0 1-1v-2a.998.998 0 0 0-.072-.393zM19 18H5v-2h14v2z" fill="white"/>
