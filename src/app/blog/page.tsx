@@ -49,7 +49,7 @@ export default function BlogIndex() {
 
               {/* Image Preview */}
               {post.image && post.image !== '/img/blog-default.jpg' && (
-                <div className="w-full relative mb-5 rounded-xl overflow-hidden aspect-[16/9] border border-[var(--border-color)]">
+                <div className="w-full relative rounded-xl overflow-hidden aspect-[16/9] border border-[var(--border-color)]" style={{ marginBottom: '1rem' }}>
                   <Image src={post.image} alt={post.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                 </div>
               )}
