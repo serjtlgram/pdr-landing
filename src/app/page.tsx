@@ -1,6 +1,7 @@
 import LandingPage from './components/LandingPage';
 import { getAllPosts } from '@/lib/blog';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Clock, BookOpen } from 'lucide-react';
 
 export default function Home() {
@@ -39,6 +40,13 @@ export default function Home() {
                       </span>
                     </div>
                   </div>
+
+                  {/* Image Preview */}
+                  {post.image && post.image !== '/img/blog-default.jpg' && (
+                    <div className="w-full relative rounded-xl overflow-hidden aspect-[16/9] border border-[var(--border-color)]" style={{ marginBottom: '1rem' }}>
+                      <Image src={post.image} alt={post.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                    </div>
+                  )}
 
                   {/* Title */}
                   <h3 className="text-[var(--text-primary)] group-hover:text-[var(--accent-cyan)] transition-colors duration-300" style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '1rem', lineHeight: 1.3 }}>
