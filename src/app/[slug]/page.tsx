@@ -44,7 +44,7 @@ export default async function BlogPostPage({
       <BackgroundEffects />
       <SiteHeader />
       
-      <main className="container-xl" style={{ paddingTop: '8rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
+      <main className="container-xl" style={{ paddingTop: '6rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
         
         {/* Back Button */}
         <div className="mb-10">
