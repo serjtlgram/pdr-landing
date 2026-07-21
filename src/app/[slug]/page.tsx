@@ -58,7 +58,7 @@ export default async function BlogPostPage({
           
           {/* Main Content */}
           <div className="lg:col-span-2 flex flex-col gap-6">
-            <article className="prose dark:prose-invert max-w-none glass-card" style={{ padding: '3rem', borderRadius: '1.5rem' }}>
+            <article className="prose dark:prose-invert max-w-none glass-card mobile-no-glass" style={{ padding: '3rem', borderRadius: '1.5rem' }}>
               {/* Article Header */}
               <header className="mb-12" style={{ marginBottom: '3.5rem' }}>
                 <div className="flex flex-wrap items-center gap-4 mb-8">
