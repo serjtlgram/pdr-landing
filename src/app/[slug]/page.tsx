@@ -122,6 +122,7 @@ export default async function BlogPostPage({
                 prose-h3:text-[1.5rem] prose-h3:mt-10 prose-h3:mb-6
                 prose-a:text-[var(--accent-blue)] hover:prose-a:text-[var(--accent-cyan)] prose-a:transition-colors prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
                 prose-strong:text-[var(--text-primary)] prose-strong:font-extrabold
+                prose-p:text-[var(--text-secondary)] prose-li:text-[var(--text-secondary)]
                 prose-ul:list-disc prose-ul:pl-6
                 prose-blockquote:border-none prose-blockquote:bg-[#f8fafc] dark:prose-blockquote:bg-[rgba(255,255,255,0.03)] prose-blockquote:rounded-2xl prose-blockquote:p-8 prose-blockquote:not-italic prose-blockquote:my-10 prose-blockquote:text-[var(--text-primary)]"
               >
