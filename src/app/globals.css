@@ -228,20 +228,12 @@ body {
   box-shadow: 0 0 30px var(--glow-cyan);
 }
 
-/* Gradient text */
+/* Gradient text (Replaced with solid color based on impeccable advice) */
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-cyan);
 }
 .gradient-text-animated {
-  background: linear-gradient(270deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple), var(--accent-cyan));
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 5s ease infinite;
+  color: var(--accent-blue);
 }
 
 /* Gradient border */
@@ -324,7 +316,7 @@ body {
   height: 1.125rem;
   border-radius: 9999px;
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 0 10px var(--glow-cyan);
 }
 [data-theme="light"] .theme-toggle-knob { transform: translateX(1.375rem); }

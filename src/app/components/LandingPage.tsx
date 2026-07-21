@@ -564,14 +564,15 @@ function LandingInner({
                     role="region"
                     itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer"
                     style={{
-                      maxHeight: openFaq === index ? '40rem' : '0',
-                      overflow: 'hidden',
-                      transition: 'max-height 0.35s ease, opacity 0.35s ease, padding 0.35s ease',
+                      display: 'grid',
+                      gridTemplateRows: openFaq === index ? '1fr' : '0fr',
+                      transition: 'grid-template-rows 0.35s ease, opacity 0.35s ease',
                       opacity: openFaq === index ? 1 : 0,
-                      padding: openFaq === index ? '0 1.5rem 1.25rem' : '0 1.5rem 0',
                     }}
                   >
-                    <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: '0.9375rem' }} itemProp="text">{faq.a}</p>
+                    <div style={{ overflow: 'hidden' }}>
+                      <p style={{ padding: '0 1.5rem 1.25rem', margin: 0, color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: '0.9375rem' }} itemProp="text">{faq.a}</p>
+                    </div>
                   </div>
                 </div>
               ))}
