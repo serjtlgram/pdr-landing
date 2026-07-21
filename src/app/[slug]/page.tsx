@@ -124,6 +124,7 @@ export default async function BlogPostPage({
                 prose-strong:text-[var(--text-primary)] prose-strong:font-extrabold
                 prose-p:text-[var(--text-secondary)] prose-li:text-[var(--text-secondary)]
                 prose-ul:list-disc prose-ul:pl-6
+                prose-img:aspect-[16/9] prose-img:object-cover prose-img:w-full prose-img:rounded-2xl prose-img:shadow-md
                 prose-blockquote:border-none prose-blockquote:bg-[#f8fafc] dark:prose-blockquote:bg-[rgba(255,255,255,0.03)] prose-blockquote:rounded-2xl prose-blockquote:p-8 prose-blockquote:not-italic prose-blockquote:my-10 prose-blockquote:text-[var(--text-primary)]"
               >
                 <ReactMarkdown 

@@ -47,6 +47,13 @@ export default function BlogIndex() {
                 </div>
               </div>
 
+              {/* Image Preview */}
+              {post.image && post.image !== '/img/blog-default.jpg' && (
+                <div className="w-full relative mb-5 rounded-xl overflow-hidden aspect-[16/9] border border-[var(--border-color)]">
+                  <Image src={post.image} alt={post.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                </div>
+              )}
+
               {/* Title */}
               <h2 className="text-[var(--text-primary)] group-hover:text-[var(--accent-cyan)] transition-colors duration-300" style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '1rem', lineHeight: 1.3 }}>
                 <Link href={`/${post.slug}`} className="focus:outline-none" style={{ color: 'inherit', textDecoration: 'none' }}>
