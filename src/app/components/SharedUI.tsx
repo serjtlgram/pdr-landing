@@ -47,17 +47,14 @@ export function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label="Переключити тему"
-      className="flex items-center gap-2 px-3 py-1.5 rounded-full glass-card hover:border-theme transition-all"
+      className="flex items-center justify-center w-10 h-10 rounded-[0.625rem] glass-card hover:border-theme transition-all"
       style={{ border: '1px solid var(--border-color)' }}
     >
       {theme === 'dark' ? (
-        <Sun className="w-4 h-4" style={{ color: 'var(--accent-cyan)' }} />
+        <Sun size={18} style={{ color: 'var(--accent-cyan)' }} />
       ) : (
-        <Moon className="w-4 h-4" style={{ color: 'var(--accent-blue)' }} />
+        <Moon size={18} style={{ color: 'var(--accent-blue)' }} />
       )}
-      <span className="text-xs font-semibold hidden sm:block" style={{ color: 'var(--text-secondary)' }}>
-        {theme === 'dark' ? 'Світла' : 'Темна'}
-      </span>
     </button>
   );
 }
