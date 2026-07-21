@@ -13,8 +13,7 @@ export default function BlogIndex() {
       <BackgroundEffects />
       <SiteHeader />
       
-      {/* Increased top padding (pt-44 md:pt-52) to guarantee ZERO header overlap */}
-      <main className="container-xl" style={{ maxWidth: '80rem', paddingTop: '10rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
+      <main className="container-xl" style={{ maxWidth: '80rem', paddingTop: '6rem', paddingBottom: '6rem', position: 'relative', zIndex: 10, fontFamily: 'var(--font-inter)' }}>
         
         {/* Page Header */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem', maxWidth: '48rem', marginLeft: 'auto', marginRight: 'auto' }}>
