@@ -114,6 +114,25 @@ export default async function BlogPostPage({
                   font-weight: 700;
                   color: #3b82f6;
                 }
+                .prose table {
+                  color: var(--text-secondary);
+                }
+                .prose thead th {
+                  color: var(--text-primary);
+                }
+                .prose tbody td {
+                  color: var(--text-secondary);
+                }
+                [data-theme="light"] .prose table,
+                [data-theme="light"] .prose tbody td {
+                  color: var(--text-secondary) !important;
+                }
+                [data-theme="light"] .prose thead th {
+                  color: var(--text-primary) !important;
+                }
+                [data-theme="light"] .prose tbody td strong {
+                  color: var(--text-primary) !important;
+                }
               `}} />
 
               {/* Article Markdown */}
@@ -133,7 +152,18 @@ export default async function BlogPostPage({
                     h2: ({node, ...props}) => <h2 className="text-[2rem] font-black text-[var(--text-primary)] tracking-tight" style={{ marginTop: '4.5rem', marginBottom: '2rem' }} {...props} />,
                     p: ({node, ...props}) => <p className="text-[1.1rem] leading-[1.85] text-[var(--text-secondary)]" style={{ marginBottom: '2.5rem' }} {...props} />,
                     ol: ({node, ...props}) => <ol className="custom-ordered-list" {...props} />,
-                    li: ({node, ...props}) => <li {...props} />
+                    li: ({node, ...props}) => <li {...props} />,
+                    table: ({node, ...props}) => (
+                      <div className="overflow-x-auto my-8">
+                        <table className="w-full text-left border-collapse" style={{ color: 'var(--text-secondary)' }} {...props} />
+                      </div>
+                    ),
+                    th: ({node, ...props}) => (
+                      <th className="font-bold text-[var(--text-primary)]" style={{ color: 'var(--text-primary)' }} {...props} />
+                    ),
+                    td: ({node, ...props}) => (
+                      <td className="text-[var(--text-secondary)]" style={{ color: 'var(--text-secondary)' }} {...props} />
+                    )
                   }}
                 >
                   {post.content}

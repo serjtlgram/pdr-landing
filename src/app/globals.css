@@ -397,6 +397,27 @@ body {
 .text-theme-muted     { color: var(--text-muted); }
 .border-theme         { border-color: var(--border-color); }
 
+/* ─── PROSE TABLE STYLES (LIGHT & DARK THEMES) ─────────────────────── */
+.prose table {
+  color: var(--text-secondary);
+}
+.prose thead th {
+  color: var(--text-primary);
+}
+.prose tbody td {
+  color: var(--text-secondary);
+}
+[data-theme="light"] .prose table,
+[data-theme="light"] .prose tbody td {
+  color: var(--text-secondary) !important;
+}
+[data-theme="light"] .prose thead th {
+  color: var(--text-primary) !important;
+}
+[data-theme="light"] .prose tbody td strong {
+  color: var(--text-primary) !important;
+}
+
 /* ─── MOBILE IMPROVEMENTS ─────────────────────────────────────────── */
 @media (max-width: 768px) {
   .container-xl {
